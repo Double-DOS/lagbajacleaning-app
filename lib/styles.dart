@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const LargeTextSize = 26.0;
 const MediumTextSize = 20.0;
@@ -69,4 +70,34 @@ ButtonStyle outlinedButtonStyle(BuildContext context) {
       },
     ),
   );
+}
+
+InputDecoration inputDecoration(String label) {
+  return InputDecoration(
+      labelText: label,
+      fillColor: Colors.white,
+      filled: true,
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue[100], width: 0.5)),
+      errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red[100], width: 0.5)),
+      focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 0.5)),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue, width: 0.5)));
+}
+
+class Loading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: SpinKitChasingDots(
+          size: 50.0,
+          color: Colors.blue,
+        ),
+      ),
+    );
+  }
 }
