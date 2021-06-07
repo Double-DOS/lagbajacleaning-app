@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 
@@ -39,7 +40,7 @@ class AuthService {
           lastName: userInfo["lastName"],
           address: userInfo["address"],
           state: userInfo["state"],
-          phoneNUmber: userInfo["phoneNumber"]);
+          phoneNumber: userInfo["phoneNumber"]);
       return _userFromFirebase(user);
     } catch (e) {
       print(e.toString());
@@ -53,6 +54,20 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+      // test cleaning database
+      CleaningSession initial = CleaningSession.initialData();
+      DatabaseService(uid: user.uid).updateCleaningSession(
+          location: initial.location,
+          userUid: user.uid,
+          apartmentType: initial.apartmentType,
+          subscription: initial.subscription,
+          rating: initial.rating,
+          isRated: initial.isRated,
+          isPaid: initial.isPaid,
+          isCompleted: initial.isCompleted,
+          totalCost: initial.totalCost,
+          dateOrdered: initial.orderDate,
+          cleaningDate: initial.cleaningDate);
       return _userFromFirebase(user);
     } catch (e) {
       print(e.toString());

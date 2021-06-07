@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/screens/wrapper.dart';
 import 'package:lagbaja_cleaning/services/auth.dart';
-import 'package:lagbaja_cleaning/styles.dart';
+import 'package:lagbaja_cleaning/shared.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         home: Wrapper(),
         theme: ThemeData(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.red,
             textTheme: TextTheme(
                 headline1: BoldTitleTextStyle,
                 headline2: BoldItalicTitleTextStyle,

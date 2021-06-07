@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/screens/authentication/emailPassword.dart';
 import 'package:lagbaja_cleaning/screens/authentication/userInfo.dart';
 import 'package:lagbaja_cleaning/services/auth.dart';
-import 'package:lagbaja_cleaning/styles.dart';
+import 'package:lagbaja_cleaning/shared.dart';
 
 class SignUpPage extends StatelessWidget {
   final Function toggleView;
@@ -12,6 +12,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: SafeArea(
           child: WillPopScope(
@@ -30,6 +31,7 @@ class SignUpPage extends StatelessWidget {
                     return MaterialPageRoute(
                         builder: (context) =>
                             UserInfo(user: arguments["user"]));
+                    break;
                   default:
                     return MaterialPageRoute(
                         builder: (context) =>

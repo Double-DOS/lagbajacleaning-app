@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/auth.dart';
-import 'package:lagbaja_cleaning/styles.dart';
+import 'package:lagbaja_cleaning/shared.dart';
 
 class UserInfo extends StatefulWidget {
   final Map<String, dynamic> user;
