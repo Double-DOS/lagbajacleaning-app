@@ -1,3 +1,5 @@
+import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
@@ -19,8 +21,10 @@ class _UserInfoState extends State<UserInfo> {
   //text field state
   String firstName = '';
   String lastName = '';
+  String countryValue = "";
   String houseAddress = '';
   String stateOfResidence = '';
+  String cityOfResidence = '';
   String error = '';
   bool hidePassword = true;
 
@@ -53,9 +57,10 @@ class _UserInfoState extends State<UserInfo> {
                         TextFormField(
                           decoration: inputDecoration('First Name').copyWith(
                               prefixIcon: Icon(CupertinoIcons.person_alt)),
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.name,
                           style: SemiBoldTitleTextStyle.copyWith(
                               color: Colors.blue, fontSize: 16.0),
+                          textCapitalization: TextCapitalization.words,
                           validator: (val) => val.isEmpty ? 'Required!' : null,
                           onChanged: (val) {
                             setState(() => firstName = val);
@@ -65,10 +70,11 @@ class _UserInfoState extends State<UserInfo> {
                         TextFormField(
                           decoration: inputDecoration('Last Name').copyWith(
                               prefixIcon: Icon(CupertinoIcons.person)),
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.name,
                           style: SemiBoldTitleTextStyle.copyWith(
                               color: Colors.blue, fontSize: 16.0),
                           validator: (val) => val.isEmpty ? 'Required!' : null,
+                          textCapitalization: TextCapitalization.words,
                           onChanged: (val) {
                             setState(() => lastName = val);
                           },
@@ -81,6 +87,7 @@ class _UserInfoState extends State<UserInfo> {
                           keyboardType: TextInputType.streetAddress,
                           style: SemiBoldTitleTextStyle.copyWith(
                               color: Colors.blue, fontSize: 16.0),
+                          textCapitalization: TextCapitalization.words,
                           validator: (val) {
                             if (val.isEmpty) {
                               return 'Required!';
@@ -93,18 +100,32 @@ class _UserInfoState extends State<UserInfo> {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: inputDecoration('State of Residence')
-                              .copyWith(
-                                  prefixIcon: Icon(CupertinoIcons.location)),
-                          style: SemiBoldTitleTextStyle.copyWith(
-                              color: Colors.blue, fontSize: 16.0),
-                          validator: (val) => val.isEmpty ? 'Required!' : null,
-                          onChanged: (val) {
-                            setState(() => stateOfResidence = val);
-                          },
-                        ),
+                        // TextFormField(
+                        //   decoration: inputDecoration('State of Residence')
+                        //       .copyWith(
+                        //           prefixIcon: Icon(CupertinoIcons.location)),
+                        //   style: SemiBoldTitleTextStyle.copyWith(
+                        //       color: Colors.blue, fontSize: 16.0),
+                        //   validator: (val) => val.isEmpty ? 'Required!' : null,
+                        //   onChanged: (val) {
+                        //     setState(() => stateOfResidence = val);
+                        //   },
+                        // ),
+
                         SizedBox(height: 20.0),
+                        CSCPicker(
+                            showStates: true,
+                            showCities: true,
+                            onCountryChanged: (value) =>
+                                setState(() => countryValue = value),
+                            onStateChanged: (value) =>
+                                setState(() => stateOfResidence = value),
+                            onCityChanged: (value) =>
+                                setState(() => cityOfResidence = value),
+                            defaultCountry: DefaultCountry.Nigeria,
+                            dropdownDecoration: BoxDecoration(
+                              border: Border.all(color: Colors.blue),
+                            )),
                         OutlinedButton(
                           onPressed: () async {
                             if (_signUpFormkey.currentState.validate()) {
@@ -119,6 +140,8 @@ class _UserInfoState extends State<UserInfo> {
                                   .putIfAbsent("address", () => houseAddress);
                               widget.user
                                   .putIfAbsent("state", () => stateOfResidence);
+                              widget.user
+                                  .putIfAbsent("city", () => cityOfResidence);
                               dynamic result =
                                   await _auth.emailSignUp(widget.user);
                               if (result == null) {

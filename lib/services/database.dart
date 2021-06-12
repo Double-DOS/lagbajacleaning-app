@@ -15,12 +15,14 @@ class DatabaseService {
       String lastName,
       String address,
       String state,
+      String city,
       String phoneNumber}) async {
     return await userInfoCollection.document(uid).setData({
       "firstName": firstName,
       "lastName": lastName,
       "address": address,
       "state": state,
+      "city": city,
       "phoneNumber": phoneNumber
     });
   }
@@ -35,6 +37,7 @@ class DatabaseService {
             state: snapshot.data["state"],
             phoneNumber: snapshot.data["phoneNumber"],
             address: snapshot.data["address"],
+            city: snapshot.data["city"],
           );
   }
 
@@ -117,29 +120,28 @@ class DatabaseService {
   Stream<List<CleaningSession>> get allUserCleaningSession {
     return cleaningSessionCollection
         .where("userUid", isEqualTo: uid)
-    .orderBy("dateOrdered", descending: true)
+        .orderBy("dateOrdered", descending: true)
         .snapshots()
         .map(_cleaningSessionListFromQuerySnapshot);
   }
 
-  CompletedSessionOverview _completedStringFromStreamInt(int streamInteger){
+  CompletedSessionOverview _completedStringFromStreamInt(int streamInteger) {
     return CompletedSessionOverview(completed: streamInteger.toString());
   }
 
-  PendingSessionOverview _pendingStringFromStreamInt(int streamInteger){
+  PendingSessionOverview _pendingStringFromStreamInt(int streamInteger) {
     return PendingSessionOverview(pending: streamInteger.toString());
   }
 
-  TotalSessionOverview _totalStringFromStreamInt(int streamInteger){
+  TotalSessionOverview _totalStringFromStreamInt(int streamInteger) {
     return TotalSessionOverview(total: streamInteger.toString());
   }
-
 
   Future<SessionOverview> get completedCleaningSessionOverView async {
     print("hereeeeeeeeeeeeeeeee");
     dynamic completedResult = await cleaningSessionCollection
         .where("userUid", isEqualTo: uid)
-    .where("isCompleted", isEqualTo: true)
+        .where("isCompleted", isEqualTo: true)
         .getDocuments();
     dynamic completedDocs = completedResult.documents.length;
 
@@ -155,12 +157,10 @@ class DatabaseService {
     dynamic totalDocs = totalResult.documents.length;
 
     return SessionOverview(
-      completed: completedDocs.toString(),
-      pending: pendingDocs.toString(),
-      total: totalDocs.toString()
-    );
+        completed: completedDocs.toString(),
+        pending: pendingDocs.toString(),
+        total: totalDocs.toString());
   }
-
 
   Stream<PendingSessionOverview> get pendingCleaningSessionOverView {
     return cleaningSessionCollection
@@ -179,5 +179,4 @@ class DatabaseService {
         .asStream()
         .map(_totalStringFromStreamInt);
   }
-
 }

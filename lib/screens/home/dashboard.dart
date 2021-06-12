@@ -14,53 +14,34 @@ import 'package:lagbaja_cleaning/shared.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
-
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-
   final AuthService _auth = AuthService();
-   static final Key _k1 = GlobalKey();
+  static final Key _k1 = GlobalKey();
   static final _bookCleaningFormKey = GlobalKey<FormState>();
   static final carousel = SessionOverviewCarousel();
-   void _showCleaningForm(){
-     showModalBottomSheet(context: context, builder: (BuildContext context){
-       return Container(
-           color: Colors.blue,
-           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-           child: Form(
-             key: _bookCleaningFormKey,
-             child: Column(
-               children: [
-                 Container(
-                   height: 30.0,
-                   child: TextFormField(
-                     key: _k1,
-                     keyboardType: TextInputType.text,
-                     decoration: inputDecoration('Enter Cleaning Location'),
-                     onChanged: (val){
-                       print(val);
-                     },
-                   ),
-                 ),
-               ],
-             ),
-
-           )
-       );
-     });
-   }
 
   @override
   Widget build(BuildContext context) {
-    print('nuid');
     final userInfo = Provider.of<UserProfileInfo>(context);
     Size size = MediaQuery.of(context).size;
     final screenHeight = size.height;
     final screenWidth = size.width;
-
+    void _showCleaningForm() {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+                height: 0.85 * screenHeight,
+                color: Colors.white70,
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                child: BookCleaningForm(userInfo: userInfo));
+          },
+          isScrollControlled: true);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -100,7 +81,9 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Icon(CupertinoIcons.location),
                       Text(
-                        userInfo == null ? "" : userInfo.state,
+                        userInfo == null
+                            ? ""
+                            : "${userInfo.city + ", " + userInfo.state}",
                         style: SmallTextStyle.copyWith(color: Colors.blue),
                       )
                     ],
@@ -108,16 +91,14 @@ class _DashboardState extends State<Dashboard> {
                 )
               ],
             ),
-
             Container(
               padding: EdgeInsets.all(5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   carousel,
-                  SizedBox(height: screenHeight*0.01),
+                  SizedBox(height: screenHeight * 0.01),
                   Container(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -139,13 +120,12 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             LastContainer(),
-
             Expanded(
               child: Center(
                 child: Container(
                     height: 170,
-                    child:
-                        Image(image: AssetImage("assets/images/clean-man.png"))),
+                    child: Image(
+                        image: AssetImage("assets/images/clean-man.png"))),
               ),
             ),
           ],
@@ -157,8 +137,6 @@ class _DashboardState extends State<Dashboard> {
           _showCleaningForm();
         },
       ),
-
-
     );
   }
 }

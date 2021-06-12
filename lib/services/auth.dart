@@ -40,6 +40,7 @@ class AuthService {
           lastName: userInfo["lastName"],
           address: userInfo["address"],
           state: userInfo["state"],
+          city: userInfo["city"],
           phoneNumber: userInfo["phoneNumber"]);
       return _userFromFirebase(user);
     } catch (e) {

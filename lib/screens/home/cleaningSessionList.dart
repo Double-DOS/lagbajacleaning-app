@@ -17,7 +17,7 @@ class _CleaningSessionsListViewState extends State<CleaningSessionsListView> {
     final screenWidth = size.width;
     final cleaningSessionsList = Provider.of<List<CleaningSession>>(context);
     return Container(
-      height: screenHeight*0.125,
+      height: screenHeight * 0.125,
       padding: EdgeInsets.symmetric(horizontal: 5),
       margin: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -28,7 +28,8 @@ class _CleaningSessionsListViewState extends State<CleaningSessionsListView> {
           physics: BouncingScrollPhysics(),
           itemCount: cleaningSessionsList.take(5).toList().length,
           itemBuilder: (context, index) {
-            return CleaningSessionTile(session: cleaningSessionsList.take(5).toList()[index]);
+            return CleaningSessionTile(
+                session: cleaningSessionsList.take(5).toList()[index]);
           },
           shrinkWrap: true),
     );

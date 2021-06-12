@@ -38,7 +38,8 @@ class _SignInPageState extends State<SignInPage> {
                             image: AssetImage('assets/images/lagbaja.png'))),
                     Text(
                       'Sign in to your dashboard!',
-                      style: SemiBoldTitleTextStyle.copyWith(color: Colors.blue),
+                      style:
+                          SemiBoldTitleTextStyle.copyWith(color: Colors.blue),
                     ),
                     Container(
                       padding: EdgeInsets.all(10.00),
@@ -143,9 +144,11 @@ class _SignInPageState extends State<SignInPage> {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets.all(20),
+                                                        const EdgeInsets.all(
+                                                            20),
                                                     child: Icon(
-                                                      CupertinoIcons.xmark_circle,
+                                                      CupertinoIcons
+                                                          .xmark_circle,
                                                       size: 80.0,
                                                       color: Colors.white,
                                                     ),

@@ -38,6 +38,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   carousel_slider: ^3.0.0
+  country_state_city_picker: ^1.2.7
+  csc_picker: ^0.2.5
 
 dev_dependencies:
   flutter_test:

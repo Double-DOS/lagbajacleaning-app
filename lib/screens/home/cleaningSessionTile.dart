@@ -15,13 +15,18 @@ class CleaningSessionTile extends StatelessWidget {
         trailing: session.isCompleted
             ? CircleAvatar(
                 backgroundColor: Colors.blue,
-          child: Text('C', style: SemiBoldTitleTextStyle.copyWith(color: Colors.white),),
+                child: Text(
+                  'C',
+                  style: SemiBoldTitleTextStyle.copyWith(color: Colors.white),
+                ),
               )
             : CircleAvatar(
                 backgroundColor: Colors.lightBlue[100],
-          child: Text('P', style: SemiBoldTitleTextStyle.copyWith(color: Colors.white),),
-
-        ),
+                child: Text(
+                  'P',
+                  style: SemiBoldTitleTextStyle.copyWith(color: Colors.white),
+                ),
+              ),
         subtitle: Text(session.location),
         dense: true,
       ),

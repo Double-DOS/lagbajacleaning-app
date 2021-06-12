@@ -11,6 +11,7 @@ class UserProfileInfo {
   final String email;
   final String address;
   final String state;
+  final String city;
   final String phoneNumber;
 
   UserProfileInfo(
@@ -20,6 +21,7 @@ class UserProfileInfo {
       this.email,
       this.address,
       this.state,
+      this.city,
       this.phoneNumber});
 
   factory UserProfileInfo.initialData() {
@@ -28,6 +30,7 @@ class UserProfileInfo {
       lastName: '',
       phoneNumber: '',
       state: '',
+      city: '',
       address: '',
     );
   }

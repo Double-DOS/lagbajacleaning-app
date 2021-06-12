@@ -6,7 +6,6 @@ import 'package:lagbaja_cleaning/shared.dart';
 class LastContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -17,7 +16,7 @@ class LastContainer extends StatelessWidget {
             label: Text('Pricing Plans', style: TextStyle(fontSize: 15)),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
                   return Colors.blue[100]; // Use the component's default.
                 },
               ),
@@ -29,7 +28,7 @@ class LastContainer extends StatelessWidget {
             label: Text('Vehicle Cleaning', style: TextStyle(fontSize: 15)),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
                   return Colors.blue[100]; // Use the component's default.
                 },
               ),

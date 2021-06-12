@@ -43,32 +43,27 @@ class CleaningSession {
   }
 }
 
-class SessionOverview{
+class SessionOverview {
   final String completed;
   final String pending;
   final String total;
 
-  SessionOverview({
-    this.completed,
-    this.pending,
-    this.total
-});
-
+  SessionOverview({this.completed, this.pending, this.total});
 }
-class CompletedSessionOverview{
-  final String completed;
 
+class CompletedSessionOverview {
+  final String completed;
 
   CompletedSessionOverview({
     this.completed,
-});
+  });
 
-  factory CompletedSessionOverview.initialData(){
+  factory CompletedSessionOverview.initialData() {
     return CompletedSessionOverview(completed: '0');
   }
 }
 
-class PendingSessionOverview{
+class PendingSessionOverview {
   final String pending;
   // final String total;
 
@@ -76,19 +71,19 @@ class PendingSessionOverview{
     this.pending,
   });
 
-  factory PendingSessionOverview.initialData(){
+  factory PendingSessionOverview.initialData() {
     return PendingSessionOverview(pending: '0');
   }
 }
 
-class TotalSessionOverview{
+class TotalSessionOverview {
   final String total;
 
   TotalSessionOverview({
     this.total,
   });
 
-  factory TotalSessionOverview.initialData(){
+  factory TotalSessionOverview.initialData() {
     return TotalSessionOverview(total: '0');
   }
 }
