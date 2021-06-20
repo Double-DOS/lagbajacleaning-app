@@ -9,13 +9,19 @@
 */
 
 class PricingList {
-  double singleRoom = 4500.0;
+  double singleRoom = 4000.0;
   double singleSelfContainRoom = 6000.0;
   double roomAndParlourSelfContain = 8000.0;
-  double twoBedroom = 12000.0;
-  double threeBedroom = 17000.0;
-  double fourBedroom = 23000.0;
-  double duplexVilla = 40000.0;
+  double twoBedroom = 13500.0;
+  double threeBedroom = 20500.0;
+  double fourBedroom = 23500.0;
+  double duplex = 35000.0;
+}
+
+class CleaningLevels {
+  double mild = 0.0;
+  double standard = 2000;
+  double deep = 4500;
 }
 
 class SubscriptionPlans {
@@ -26,11 +32,10 @@ class SubscriptionPlans {
 
 List<String> apartmentTypes = [
   'Single Room',
-  'Single Self Contain Room',
-  'Self Contain Room and Parlour',
+  'Self-Contain Room',
+  'Self-Contain Room and Parlour',
   '2-Bedroom Apartment',
   '3-Bedroom Apartment',
   '4-Bedroom Apartment',
   'Duplex',
-  'Villa',
 ];

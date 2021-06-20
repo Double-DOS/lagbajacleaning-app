@@ -40,12 +40,8 @@ dependencies:
   carousel_slider: ^3.0.0
   country_state_city_picker: ^1.2.7
   csc_picker: ^0.2.5
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-# For information on the generic Dart part of this file, see the
+  intl: ^0.17.0
+  currency_icons: ^0.2.0
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.

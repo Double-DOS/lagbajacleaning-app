@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CleaningSession {
   final String uid;
   final String location;
@@ -19,7 +17,7 @@ class CleaningSession {
       this.userUid,
       this.location,
       this.subscription, //"One-Off", "Weekly", "Monthly", "Bi-Weekly"
-      this.apartmentType, //"One-Off", "Weekly", "Monthly", "Bi-Weekly"
+      this.apartmentType,
       this.rating,
       this.totalCost,
       this.isRated,
@@ -39,7 +37,7 @@ class CleaningSession {
         isPaid: false,
         isCompleted: false,
         cleaningDate: DateTime(2021, 5, 30),
-        orderDate: DateTime(2021, 5, 29));
+        orderDate: DateTime.now());
   }
 }
 

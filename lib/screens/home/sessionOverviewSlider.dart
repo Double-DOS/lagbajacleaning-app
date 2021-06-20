@@ -26,17 +26,15 @@ Widget overviewContainer(
                 offset: Offset.fromDirection(1.0))
           ]),
       child: Wrap(
-        direction: Axis.vertical,
+        direction: Axis.horizontal,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal:  8.0),
+          Center(
             child: Text(
               caption,
               style: SemiBoldTitleTextStyle.copyWith(color: Colors.white),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal:  8.0),
+          Center(
             child: Text(
               sessionCount,
               style: BoldTitleTextStyle.copyWith(color: Colors.white),
@@ -69,7 +67,7 @@ class SessionOverviewCarousel extends StatelessWidget {
                     options: CarouselOptions(
                         enableInfiniteScroll: false,
                         scrollPhysics: BouncingScrollPhysics(),
-                        height: screenHeight * 0.1,
+                        height: 70,
                         autoPlay: true,
                         enlargeCenterPage: true),
                     items: [

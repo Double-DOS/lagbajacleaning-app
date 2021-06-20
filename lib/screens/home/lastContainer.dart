@@ -24,7 +24,7 @@ class LastContainer extends StatelessWidget {
           ),
           TextButton.icon(
             icon: Icon(Icons.car_rental),
-            onLongPress: () {},
+            onPressed: null,
             label: Text('Vehicle Cleaning', style: TextStyle(fontSize: 15)),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
