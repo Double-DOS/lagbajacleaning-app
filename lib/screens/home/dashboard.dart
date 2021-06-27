@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lagbaja_cleaning/models/pricing.dart';
 import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/screens/home/oneOffBookCleaningForm.dart';
@@ -39,43 +40,48 @@ class _DashboardState extends State<Dashboard> {
             return DefaultTabController(
               length: 2,
               initialIndex: 0,
-              child: Container(
-                height: 0.6 * screenHeight,
-                child: Column(
-                  children: [
-                    TabBar(
-                      labelColor: Colors.blue,
-                      tabs: <Widget>[
-                        Tab(
-                            text: 'One-off Booking',
-                            icon: Icon(Icons.airplane_ticket_outlined)),
-                        Tab(
-                          text: 'Routine Subscription',
-                          icon: Icon(Icons.replay_outlined),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
+              child: StreamProvider.value(
+                  value: DatabaseService().getPaystackSecretKey,
+                  initialData: SecretKey('paystack'),
+                  builder: (context, snapshot) {
+                    return Container(
+                      height: 0.6 * screenHeight,
+                      child: Column(
                         children: [
-                          Container(
-                              color: Colors.white70,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 10),
-                              child:
-                                  OneOffBookCleaningForm(userInfo: userInfo)),
-                          Container(
-                              color: Colors.white70,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 10),
-                              child:
-                                  RoutineBookCleaningForm(userInfo: userInfo)),
+                          TabBar(
+                            labelColor: Colors.blue,
+                            tabs: <Widget>[
+                              Tab(
+                                  text: 'One-off Booking',
+                                  icon: Icon(Icons.airplane_ticket_outlined)),
+                              Tab(
+                                text: 'Routine Subscription',
+                                icon: Icon(Icons.replay_outlined),
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                Container(
+                                    color: Colors.white70,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 10),
+                                    child: OneOffBookCleaningForm(
+                                        userInfo: userInfo)),
+                                Container(
+                                    color: Colors.white70,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 10),
+                                    child: RoutineBookCleaningForm(
+                                        userInfo: userInfo)),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                    );
+                  }),
             );
           },
           isScrollControlled: true);

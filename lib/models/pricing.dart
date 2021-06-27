@@ -8,6 +8,11 @@
 * Event Centers - Price is stated after inspection
 */
 
+class SecretKey {
+  final key;
+  SecretKey(this.key);
+}
+
 class PricingList {
   double singleRoom = 4000.0;
   double singleSelfContainRoom = 6000.0;
@@ -26,8 +31,8 @@ class CleaningLevels {
 
 class SubscriptionPlans {
   double weeklyPlan = 0.20;
-  double monthlyPlan = 0.10;
-  double quarterlyPlan = 0.05;
+  double biWeeklyPlan = 0.10;
+  double monthlylyPlan = 0.05;
 }
 
 List<String> apartmentTypes = [

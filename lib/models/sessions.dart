@@ -9,6 +9,7 @@ class CleaningSession {
   final bool isPaid;
   final bool isCompleted;
   final String userUid;
+  final String cleaningDay;
   final DateTime cleaningDate;
   final DateTime orderDate;
 
@@ -23,6 +24,7 @@ class CleaningSession {
       this.isRated,
       this.isCompleted,
       this.isPaid,
+      this.cleaningDay,
       this.cleaningDate,
       this.orderDate});
   factory CleaningSession.initialData() {
@@ -35,8 +37,9 @@ class CleaningSession {
         isRated: false,
         rating: 0,
         isPaid: false,
+        cleaningDay: 'Tuesday',
         isCompleted: false,
-        cleaningDate: DateTime(2021, 5, 30),
+        cleaningDate: DateTime.now().add(Duration(days: 1)),
         orderDate: DateTime.now());
   }
 }

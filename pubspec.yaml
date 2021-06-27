@@ -40,10 +40,8 @@ dependencies:
   carousel_slider: ^3.0.0
   country_state_city_picker: ^1.2.7
   csc_picker: ^0.2.5
-  intl: ^0.17.0
   currency_icons: ^0.2.0
-# following page: https://dart.dev/tools/pub/pubspec
-
+  paystack_manager: ^1.0.4
 # The following section is specific to Flutter.
 flutter:
 

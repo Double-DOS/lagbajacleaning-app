@@ -8,7 +8,7 @@ class AuthService {
 
   // create our own user object
   User _userFromFirebase(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null ? User(uid: user.uid, email: user.email) : null;
   }
 
   // auth change user stream
@@ -55,20 +55,7 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      // test cleaning database
-      CleaningSession initial = CleaningSession.initialData();
-      DatabaseService(uid: user.uid).updateCleaningSession(
-          location: initial.location,
-          userUid: user.uid,
-          apartmentType: initial.apartmentType,
-          subscription: initial.subscription,
-          rating: initial.rating,
-          isRated: initial.isRated,
-          isPaid: initial.isPaid,
-          isCompleted: initial.isCompleted,
-          totalCost: initial.totalCost,
-          dateOrdered: initial.orderDate,
-          cleaningDate: initial.cleaningDate);
+      print(user);
       return _userFromFirebase(user);
     } catch (e) {
       print(e.toString());

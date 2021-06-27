@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lagbaja_cleaning/models/pricing.dart';
 import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 
@@ -48,6 +51,21 @@ class DatabaseService {
         .map(_userInfoFromDocumentSnapshot);
   }
 
+  // secret keys section
+  final CollectionReference secretKeyCollection =
+      Firestore.instance.collection('secretKeys');
+
+  SecretKey _getSecretKeyFromDb(DocumentSnapshot snapshot) {
+    return SecretKey(snapshot.data["key"]);
+  }
+
+  Stream<SecretKey> get getPaystackSecretKey {
+    return secretKeyCollection
+        .document('paystack-key')
+        .snapshots()
+        .map(_getSecretKeyFromDb);
+  }
+
   //cleaning sessions section
   final CollectionReference cleaningSessionCollection =
       Firestore.instance.collection('cleaningSession');
@@ -61,6 +79,7 @@ class DatabaseService {
       int rating,
       bool isRated,
       bool isPaid,
+      String cleaningDay,
       bool isCompleted,
       DateTime dateOrdered,
       DateTime cleaningDate,
@@ -74,11 +93,17 @@ class DatabaseService {
       "isRated": isRated,
       "isCompleted": isCompleted,
       "isPaid": isPaid,
+      "cleaningDay": cleaningDay,
       "userUid": userUid,
       "dateOrdered": dateOrdered,
       "cleaningDate": cleaningDate
     };
-    return await cleaningSessionCollection.document().setData(data);
+    try {
+      void added = await cleaningSessionCollection.document().setData(data);
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   CleaningSession _cleaningSessionFromDocumentSnapshot(
@@ -90,7 +115,10 @@ class DatabaseService {
             userUid: snapshot.data["userUid"],
             location: snapshot.data["location"],
             apartmentType: snapshot.data["apartmentType"],
+            orderDate: snapshot.data["dateOrdered"].toDate(),
+            cleaningDate: snapshot.data["cleaningDate"].toDate(),
             subscription: snapshot.data["subscription"],
+            cleaningDay: snapshot.data["cleaningDay"],
             totalCost: snapshot.data["totalCost"],
             rating: snapshot.data["rating"],
             isRated: snapshot.data["isRated"],
@@ -105,9 +133,12 @@ class DatabaseService {
       cleaningList.add(CleaningSession(
           uid: snapshot.data["uid"],
           userUid: snapshot.data["userUid"],
+          orderDate: snapshot.data["dateOrdered"].toDate(),
+          cleaningDate: snapshot.data["cleaningDate"].toDate(),
           location: snapshot.data["location"],
           apartmentType: snapshot.data["apartmentType"],
           subscription: snapshot.data["subscription"],
+          cleaningDay: snapshot.data["cleaningDay"],
           totalCost: snapshot.data["totalCost"],
           rating: snapshot.data["rating"],
           isRated: snapshot.data["isRated"],

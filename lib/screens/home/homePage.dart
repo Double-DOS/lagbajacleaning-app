@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
+import 'package:lagbaja_cleaning/screens/history/historyPage.dart';
 import 'package:lagbaja_cleaning/screens/home/dashboard.dart';
+import 'package:lagbaja_cleaning/screens/home/lastContainer.dart';
 import 'package:lagbaja_cleaning/screens/home/sideBar.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +24,7 @@ class _HomePageState extends State<HomePage>
   Animation<double> _menuScaleAnimation;
   Animation<Offset> _slideAnimation;
 
-  final List<Widget> _tabs = [Dashboard(), Dashboard(), Dashboard()];
+  final List<Widget> _tabs = [Dashboard(), HistoryPage(), LastContainer()];
 
   @override
   void initState() {
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage>
                           ])
                     ],
                     builder: (context, child) {
-                      return  _tabs[_index];
+                      return _tabs[_index];
                     }),
                 bottomNavigationBar: BottomNavigationBar(
                   currentIndex: _index,
