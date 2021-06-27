@@ -42,6 +42,7 @@ dependencies:
   csc_picker: ^0.2.5
   currency_icons: ^0.2.0
   paystack_manager: ^1.0.4
+  emojis: ^0.9.3
 # The following section is specific to Flutter.
 flutter:
 

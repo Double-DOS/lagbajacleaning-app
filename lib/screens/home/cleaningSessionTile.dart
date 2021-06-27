@@ -62,25 +62,27 @@ class CleaningSessionTile extends StatelessWidget {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 50,
                           ),
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  session.apartmentType,
-                                  textAlign: TextAlign.center,
-                                  style: BoldTitleTextStyle.copyWith(
-                                    color: Colors.lightBlue[900],
+                          Center(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    session.apartmentType,
+                                    textAlign: TextAlign.center,
+                                    style: BoldTitleTextStyle.copyWith(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  session.location,
-                                  textAlign: TextAlign.center,
-                                  style: SmallTextStyle,
-                                ),
-                              ],
+                                  Text(
+                                    session.location,
+                                    textAlign: TextAlign.center,
+                                    style: SmallTextStyle,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -94,65 +96,56 @@ class CleaningSessionTile extends StatelessWidget {
                                   color: Colors.lightBlue[900]),
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      'Subscription',
-                                      style: BodyTextStyle.copyWith(
-                                          color: Colors.white),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          session.subscription,
-                                          textAlign: TextAlign.center,
-                                          style: BoldTitleTextStyle.copyWith(
-                                            color: Colors.lightBlue[900],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      'Date Ordered',
-                                      style: BodyTextStyle.copyWith(
-                                          color: Colors.white),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          DateFormat.yMMMEd()
-                                              .format(session.orderDate),
-                                          textAlign: TextAlign.center,
-                                          style: BoldTitleTextStyle.copyWith(
-                                            color: Colors.lightBlue[900],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
+                          session.subscription == "One-Off"
+                              ? oneOffDetails(session)
+                              : routineDetails(session),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: session.isCompleted
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'CLEANED!',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  BoldTitleTextStyle.copyWith(
+                                                color: Colors.lightBlue[900],
+                                              ),
+                                            ),
+                                            Icon(
+                                              CupertinoIcons.hand_thumbsup_fill,
+                                              color: Colors.lightBlue[900],
+                                            )
+                                          ],
+                                        )
+                                      : session.routineLength == 0
+                                          ? Text(
+                                              'PENDING',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  BoldTitleTextStyle.copyWith(
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : Text(
+                                              'IN PROGRESS',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  BoldTitleTextStyle.copyWith(
+                                                color: Colors.lightBlue[300],
+                                              ),
+                                            )),
                             ),
                           )
                         ],
@@ -165,4 +158,328 @@ class CleaningSessionTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget oneOffDetails(CleaningSession session) {
+  return Container(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Subscription',
+                style: BodyTextStyle.copyWith(color: Colors.white),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    session.subscription,
+                    textAlign: TextAlign.center,
+                    style: SemiBoldTitleTextStyle.copyWith(
+                      color: Colors.lightBlue[900],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Date Ordered',
+                style: BodyTextStyle.copyWith(color: Colors.white),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    DateFormat.yMMMEd().format(session.orderDate),
+                    textAlign: TextAlign.center,
+                    style: SemiBoldTitleTextStyle.copyWith(
+                      color: Colors.lightBlue[900],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Cleaning Date',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        DateFormat.yMMMEd().format(session.cleaningDate),
+                        textAlign: TextAlign.center,
+                        style: SemiBoldTitleTextStyle.copyWith(
+                          color: Colors.lightBlue[900],
+                        ),
+                      )),
+                )
+              ],
+            )),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Overall Cost',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        session.totalCost.toString(),
+                        textAlign: TextAlign.center,
+                        style: SemiBoldTitleTextStyle.copyWith(
+                          color: Colors.lightBlue[900],
+                        ),
+                      )),
+                )
+              ],
+            )),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Payment',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        session.isPaid ? 'Successful' : 'Pending',
+                        textAlign: TextAlign.center,
+                        style: SemiBoldTitleTextStyle.copyWith(
+                          color: Colors.lightBlue[900],
+                        ),
+                      )),
+                )
+              ],
+            )),
+      ],
+    ),
+  );
+}
+
+Widget routineDetails(CleaningSession session) {
+  return Container(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Subscription',
+                style: BodyTextStyle.copyWith(color: Colors.white),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    session.subscription,
+                    textAlign: TextAlign.center,
+                    style: SemiBoldTitleTextStyle.copyWith(
+                      color: Colors.lightBlue[900],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Date Ordered',
+                style: BodyTextStyle.copyWith(color: Colors.white),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    DateFormat.yMMMEd().format(session.orderDate),
+                    textAlign: TextAlign.center,
+                    style: SemiBoldTitleTextStyle.copyWith(
+                      color: Colors.lightBlue[900],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Cleaning Day',
+                style: BodyTextStyle.copyWith(color: Colors.white),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    session.cleaningDay,
+                    textAlign: TextAlign.center,
+                    style: SemiBoldTitleTextStyle.copyWith(
+                      color: Colors.lightBlue[900],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Routine Length',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(Icons.replay_rounded,
+                            color: Colors.lightBlue[900]),
+                        Text(
+                          '${session.routineProgress} of ${session.routineLength} Sessions',
+                          style: SemiBoldTitleTextStyle.copyWith(
+                            color: Colors.lightBlue[900],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            )),
+        //progress
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+          child: LinearProgressIndicator(
+            color: Colors.lightBlue[900],
+            backgroundColor: Colors.white,
+            minHeight: 10,
+            value: (session.routineProgress.toDouble()) / session.routineLength,
+          ),
+        ),
+
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Overall Cost',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        session.totalCost.toString(),
+                        textAlign: TextAlign.center,
+                        style: SemiBoldTitleTextStyle.copyWith(
+                          color: Colors.lightBlue[900],
+                        ),
+                      )),
+                )
+              ],
+            )),
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Payment',
+                  style: BodyTextStyle.copyWith(color: Colors.white),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        session.isPaid ? 'Successful' : 'Pending',
+                        textAlign: TextAlign.center,
+                        style: SemiBoldTitleTextStyle.copyWith(
+                          color: Colors.lightBlue[900],
+                        ),
+                      )),
+                )
+              ],
+            )),
+      ],
+    ),
+  );
 }

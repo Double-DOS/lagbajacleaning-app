@@ -90,7 +90,7 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
           userUid: user.uid,
           totalCost: totalCost,
           isRated: initial.isRated,
-          isPaid: initial.isPaid,
+          isPaid: true,
           cleaningDay: initial.cleaningDay,
           isCompleted: initial.isCompleted,
           dateOrdered: initial.orderDate,

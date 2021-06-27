@@ -67,7 +67,7 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                   minValue: 2,
                   maxValue: 20,
                   onChanged: (value) {
-                    routineLength = double.parse(value.toString());
+                    routineLength = value.toDouble();
                   },
                 ),
               ),
@@ -207,8 +207,10 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
           userUid: user.uid,
           totalCost: overallTotalCost,
           isRated: initial.isRated,
-          isPaid: initial.isPaid,
+          isPaid: true,
+          routineLength: routineLength.toInt(),
           isCompleted: initial.isCompleted,
+          cleaningDay: preferredCleaningDay,
           dateOrdered: initial.orderDate,
           cleaningDate: selectedDate);
       print("RESULT ----> ${result.toString()}");
@@ -454,97 +456,6 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                                 )
                               ],
                             ),
-
-                            // Text('When do you want us to come clean?',
-                            //     style: SmallTextStyle.copyWith(color: Colors.blue)),
-                            // SizedBox(
-                            //   height: 10,
-                            // ),
-                            // Row(
-                            //     mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       PopupMenuButton(
-                            //         onSelected: (value) {
-                            //           switch (value) {
-                            //             case 'Today':
-                            //               setState(() {
-                            //                 selectedDate = DateTime.now();
-                            //                 stringDate =
-                            //                     dateFormat.format(selectedDate);
-                            //               });
-                            //               break;
-                            //             case 'Tommorrow':
-                            //               setState(() {
-                            //                 selectedDate = DateTime.now()
-                            //                     .add(Duration(days: 1));
-                            //                 stringDate =
-                            //                     dateFormat.format(selectedDate);
-                            //               });
-                            //               break;
-                            //             case 'Schedule':
-                            //               displayDatePicker();
-                            //               break;
-                            //           }
-                            //         },
-                            //         itemBuilder: (BuildContext context) => [
-                            //           PopupMenuItem(
-                            //             value: 'Today',
-                            //             child: ListTile(
-                            //               contentPadding: EdgeInsets.all(0),
-                            //               title: Text(
-                            //                 'Today',
-                            //                 style:
-                            //                     TextStyle(color: Colors.white),
-                            //               ),
-                            //             ),
-                            //           ),
-                            //           PopupMenuItem(
-                            //             value: 'Tommorrow',
-                            //             child: ListTile(
-                            //               contentPadding: EdgeInsets.all(0),
-                            //               title: Text('Tomorrow',
-                            //                   style: TextStyle(
-                            //                       color: Colors.white)),
-                            //             ),
-                            //           ),
-                            //           PopupMenuItem(
-                            //             value: 'Schedule',
-                            //             child: ListTile(
-                            //               contentPadding: EdgeInsets.all(0),
-                            //               title: Text('Schedule Your Date',
-                            //                   style: TextStyle(
-                            //                       color: Colors.white)),
-                            //             ),
-                            //           )
-                            //         ],
-                            //         child: Container(
-                            //           padding: EdgeInsets.all(10),
-                            //           decoration: BoxDecoration(
-                            //               borderRadius:
-                            //                   BorderRadius.circular(100),
-                            //               color: Colors.blue),
-                            //           child: Icon(
-                            //             Icons.date_range_outlined,
-                            //             size: 30.0,
-                            //             color: Colors.white,
-                            //           ),
-                            //         ),
-                            //         color: Colors.blue,
-                            //         shape: RoundedRectangleBorder(
-                            //             borderRadius:
-                            //                 BorderRadius.circular(10)),
-                            //       ),
-                            //       Padding(
-                            //           padding: EdgeInsets.all(15),
-                            //           child: Text(
-                            //             stringDate != null
-                            //                 ? stringDate
-                            //                 : 'When do you want us to come clean?',
-                            //             style: BoldTitleTextStyle.copyWith(
-                            //                 fontSize: 15, color: Colors.blue),
-                            //           ))
-                            //     ]),
                             selectRoutineWidget(radioValue),
                             Center(
                                 child: OutlinedButton.icon(
@@ -552,6 +463,9 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                                       if (_routineBookCleaningFormKey
                                           .currentState
                                           .validate()) {
+                                        setState(() {
+                                          loading = true;
+                                        });
                                         print(selectedDate);
                                         print(selectedApartmentValue);
                                         print(selectedLocation);

@@ -5,6 +5,8 @@ class CleaningSession {
   final String apartmentType;
   final double totalCost;
   final int rating;
+  final int routineLength;
+  final int routineProgress;
   final bool isRated;
   final bool isPaid;
   final bool isCompleted;
@@ -22,6 +24,8 @@ class CleaningSession {
       this.rating,
       this.totalCost,
       this.isRated,
+      this.routineLength,
+      this.routineProgress,
       this.isCompleted,
       this.isPaid,
       this.cleaningDay,
@@ -35,6 +39,8 @@ class CleaningSession {
         subscription: "One-Off",
         apartmentType: "Single room",
         isRated: false,
+        routineLength: 0,
+        routineProgress: 0,
         rating: 0,
         isPaid: false,
         cleaningDay: 'Tuesday',
