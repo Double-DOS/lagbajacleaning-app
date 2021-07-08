@@ -26,6 +26,7 @@ const SemiBoldTitleTextStyle = TextStyle(
 const BoldTitleTextStyle = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w700,
+  fontStyle: FontStyle.normal,
   fontSize: LargeTextSize,
   color: Colors.black,
 );
@@ -186,3 +187,20 @@ List<String> weekdays = [
   'Friday',
   'Saturday',
 ];
+
+Widget successImage() {
+  return Container(
+    child: Column(
+      children: [
+        Image(
+          height: 250,
+          image: AssetImage('assets/images/payment-success.png'),
+        ),
+        Text(
+          'We are on our way!',
+          style: BoldTitleTextStyle.copyWith(color: Colors.blue),
+        )
+      ],
+    ),
+  );
+}

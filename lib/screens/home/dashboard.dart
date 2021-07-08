@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lagbaja_cleaning/models/pricing.dart';
@@ -34,7 +35,7 @@ class _DashboardState extends State<Dashboard> {
       showModalBottomSheet(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50))),
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
           context: context,
           builder: (BuildContext context) {
             return DefaultTabController(
@@ -45,7 +46,7 @@ class _DashboardState extends State<Dashboard> {
                   initialData: SecretKey('paystack'),
                   builder: (context, snapshot) {
                     return Container(
-                      height: 0.6 * screenHeight,
+                      height: 0.56 * screenHeight,
                       child: Column(
                         children: [
                           TabBar(
@@ -91,89 +92,84 @@ class _DashboardState extends State<Dashboard> {
       resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-        child: Container(
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TweenAnimationBuilder(
+                          tween: Tween<double>(
+                              begin: SmallTextSize, end: LargeTextSize + 7),
+                          duration: Duration(milliseconds: 300),
+                          builder: (BuildContext context, double _fontSize,
+                              Widget child) {
+                            return Text(
                               'Hi, ${userInfo == null ? "" : userInfo.firstName}!',
                               style: BoldTitleTextStyle.copyWith(
-                                  fontWeight: FontWeight.w700, fontSize: 34),
-                            ),
-                            Icon(
-                              CupertinoIcons.sun_max_fill,
-                              color: Colors.yellow,
-                            )
-                          ],
-                        ),
-                        Text(
-                          'Have you washed your hands?',
-                          style: SmallTextStyle.copyWith(color: Colors.blue),
-                        )
-                      ],
-                    ),
+                                  fontSize: _fontSize,
+                                  color: Colors.blue,
+                                  fontStyle: FontStyle.normal),
+                              textAlign: TextAlign.center,
+                            );
+                          }),
+                      Text(
+                        'Have you washed your hands?',
+                        style: SmallTextStyle.copyWith(color: Colors.blue),
+                      )
+                    ],
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        Icon(CupertinoIcons.location),
-                        Text(
-                          userInfo == null
-                              ? ""
-                              : "${userInfo.city + ", " + userInfo.state}",
-                          style: SmallTextStyle.copyWith(color: Colors.blue),
-                        )
-                      ],
-                    ),
-                  )
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.location),
+                      Text(
+                        userInfo == null
+                            ? ""
+                            : "${userInfo.city + ", " + userInfo.state}",
+                        style: SmallTextStyle.copyWith(color: Colors.blue),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  carousel,
+                  SizedBox(height: screenHeight * 0.01),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    carousel,
-                    SizedBox(height: screenHeight * 0.01),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Text(
-                        'Recent Cleaning Sessions',
-                        textAlign: TextAlign.end,
-                        style: BodyTextStyle.copyWith(color: Colors.blue[900]),
-                      ),
-                    ),
-                    SafeArea(child: CleaningSessionsListView()),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      child: Text(
-                        'See Details',
-                        textAlign: TextAlign.end,
-                        style: BodyTextStyle.copyWith(color: Colors.blue[900]),
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            Center(
+              child: Container(
+                  height: 150,
+                  child:
+                      Image(image: AssetImage("assets/images/clean-man.png"))),
+            ),
+            LastContainer(),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              child: Text(
+                'Cleaning Sessions',
+                textAlign: TextAlign.center,
+                style: BodyTextStyle.copyWith(color: Colors.blue[900]),
               ),
-              LastContainer(),
-              Center(
-                child: Container(
-                    height: 170,
-                    child: Image(
-                        image: AssetImage("assets/images/clean-man.png"))),
-              ),
-            ],
-          ),
+            ),
+            SafeArea(child: CleaningSessionsListView()),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

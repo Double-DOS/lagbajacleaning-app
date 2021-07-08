@@ -129,7 +129,7 @@ class CleaningSessionTile extends StatelessWidget {
                                             )
                                           ],
                                         )
-                                      : session.routineLength == 0
+                                      : session.routineProgress == 0
                                           ? Text(
                                               'PENDING',
                                               textAlign: TextAlign.center,

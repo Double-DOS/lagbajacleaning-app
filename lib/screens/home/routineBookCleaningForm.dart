@@ -68,6 +68,9 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                   maxValue: 20,
                   onChanged: (value) {
                     routineLength = value.toDouble();
+                    setState(() {
+                      overallTotalCost = discountedCost * routineLength;
+                    });
                   },
                 ),
               ),
@@ -297,6 +300,7 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                     child: Stack(
                       children: [
                         Positioned(
+                          right: 0,
                           bottom: 0,
                           child: Text(
                             'NGN ${overallTotalCost.toString()}',
@@ -304,189 +308,232 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                                 fontSize: 18, color: Colors.blue),
                           ),
                         ),
-                        ListView(
+                        SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
-                          children: [
-                            TextFormField(
-                              keyboardType: TextInputType.text,
-                              enabled: !_switchValue,
-                              controller: myController,
-                              validator: (val) => val.isEmpty
-                                  ? 'Please fill in location'
-                                  : null,
-                              decoration:
-                                  inputDecoration('Enter Cleaning Location'),
-                              onChanged: (val) {
-                                setState(() {
-                                  selectedLocation = myController.text;
-                                });
-                                print(selectedLocation);
-                              },
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Switch.adaptive(
-                                  value: _switchValue,
-                                  onChanged: (T) {
-                                    setState(() {
-                                      _switchValue = !_switchValue;
-                                    });
-                                    if (_switchValue) {
-                                      myController.text =
-                                          widget.userInfo.address;
-                                      selectedLocation = myController.text;
-                                    }
-                                  },
-                                  activeColor: Colors.blue[900],
-                                ),
-                                Text(
-                                  'Use Home Address',
-                                  style: SmallTextStyle.copyWith(
-                                      color: Colors.blue),
-                                )
-                              ],
-                            ),
-                            DropdownButtonFormField(
-                              items: buildApartmentDropdown(),
-                              validator: (val) => val == null
-                                  ? 'Please select house type'
-                                  : null,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedApartmentValue = value;
-                                  switch (selectedApartmentValue) {
-                                    case 'Single Room':
-                                      apartmentCost = PricingList().singleRoom;
-                                      break;
-                                    case 'Self-Contain Room':
-                                      apartmentCost =
-                                          PricingList().singleSelfContainRoom;
-                                      break;
-                                    case 'Self-Contain Room and Parlour':
-                                      apartmentCost = PricingList()
-                                          .roomAndParlourSelfContain;
-                                      break;
-                                    case '2-Bedroom Apartment':
-                                      apartmentCost = PricingList().twoBedroom;
-                                      break;
-                                    case '3-Bedroom Apartment':
-                                      apartmentCost =
-                                          PricingList().threeBedroom;
-                                      break;
-                                    case '4-Bedroom Apartment':
-                                      apartmentCost = PricingList().fourBedroom;
-                                      break;
-                                    case 'Duplex':
-                                      apartmentCost = PricingList().duplex;
-                                      break;
-                                  }
-                                  apartmentCost += 2500;
-                                  discountedCost = apartmentCost -
-                                      (discount * apartmentCost);
-                                  overallTotalCost =
-                                      discountedCost * routineLength;
-                                });
-                              },
-                              icon: Icon(Icons.arrow_drop_down_circle_outlined,
-                                  color: Colors.blue),
-                              decoration:
-                                  inputDecoration('Select House Type...'),
-                            ),
-                            Column(
-                              children: [
-                                RadioListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  value: 'Weekly',
-                                  groupValue: radioValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      radioValue = value;
-                                      discount = SubscriptionPlans().weeklyPlan;
-                                      discountedCost = apartmentCost -
-                                          (discount * apartmentCost);
-                                      overallTotalCost =
-                                          discountedCost * routineLength;
-                                    });
-                                  },
-                                  title: Text(
-                                    'Weekly',
-                                    style: BodyTextStyle,
-                                  ),
-                                ),
-                                RadioListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  value: 'Bi-Weekly',
-                                  groupValue: radioValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      radioValue = value;
-                                      discount =
-                                          SubscriptionPlans().biWeeklyPlan;
-                                      discountedCost = apartmentCost -
-                                          (discount * apartmentCost);
-                                      overallTotalCost =
-                                          discountedCost * routineLength;
-                                    });
-                                  },
-                                  title: Text(
-                                    'Bi-Weekly',
-                                    style: BodyTextStyle,
-                                  ),
-                                ),
-                                RadioListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  value: 'Monthly',
-                                  groupValue: radioValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      radioValue = value;
-                                      discount =
-                                          SubscriptionPlans().monthlylyPlan;
-                                      discountedCost = apartmentCost -
-                                          (discount * apartmentCost);
-                                      overallTotalCost =
-                                          discountedCost * routineLength;
-                                    });
-                                  },
-                                  title: Text(
-                                    'Monthly',
-                                    style: BodyTextStyle,
-                                  ),
-                                )
-                              ],
-                            ),
-                            selectRoutineWidget(radioValue),
-                            Center(
-                                child: OutlinedButton.icon(
-                                    onPressed: () async {
-                                      if (_routineBookCleaningFormKey
-                                          .currentState
-                                          .validate()) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        print(selectedDate);
-                                        print(selectedApartmentValue);
-                                        print(selectedLocation);
-                                        print(overallTotalCost);
-                                        CleaningSession initial =
-                                            CleaningSession.initialData();
-                                        processPayment(
-                                            context: context,
-                                            secretKey: secretKey.key,
-                                            amountPayable: overallTotalCost,
-                                            userEmail: user.email,
-                                            firstName:
-                                                widget.userInfo.firstName,
-                                            lastName: widget.userInfo.lastName,
-                                            subscriptionType: radioValue,
-                                            userUid: user.uid);
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextFormField(
+                                keyboardType: TextInputType.text,
+                                enabled: !_switchValue,
+                                controller: myController,
+                                validator: (val) => val.isEmpty
+                                    ? 'Please fill in location'
+                                    : null,
+                                decoration:
+                                    inputDecoration('Enter Cleaning Location'),
+                                onChanged: (val) {
+                                  setState(() {
+                                    selectedLocation = myController.text;
+                                  });
+                                  print(selectedLocation);
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Switch.adaptive(
+                                    value: _switchValue,
+                                    onChanged: (T) {
+                                      setState(() {
+                                        _switchValue = !_switchValue;
+                                      });
+                                      if (_switchValue) {
+                                        myController.text =
+                                            widget.userInfo.address;
+                                        selectedLocation = myController.text;
                                       }
                                     },
-                                    icon: Icon(Icons.add_location_alt_outlined),
-                                    label: Text('Book Lagbaja!')))
-                          ],
+                                    activeColor: Colors.blue[900],
+                                  ),
+                                  Text(
+                                    'Use Home Address',
+                                    style: SmallTextStyle.copyWith(
+                                        color: Colors.blue),
+                                  )
+                                ],
+                              ),
+                              DropdownButtonFormField(
+                                items: buildApartmentDropdown(),
+                                validator: (val) => val == null
+                                    ? 'Please select house type'
+                                    : null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedApartmentValue = value;
+                                    switch (selectedApartmentValue) {
+                                      case 'Single Room':
+                                        apartmentCost =
+                                            PricingList().singleRoom;
+                                        break;
+                                      case 'Self-Contain Room':
+                                        apartmentCost =
+                                            PricingList().singleSelfContainRoom;
+                                        break;
+                                      case 'Self-Contain Room and Parlour':
+                                        apartmentCost = PricingList()
+                                            .roomAndParlourSelfContain;
+                                        break;
+                                      case '2-Bedroom Apartment':
+                                        apartmentCost =
+                                            PricingList().twoBedroom;
+                                        break;
+                                      case '3-Bedroom Apartment':
+                                        apartmentCost =
+                                            PricingList().threeBedroom;
+                                        break;
+                                      case '4-Bedroom Apartment':
+                                        apartmentCost =
+                                            PricingList().fourBedroom;
+                                        break;
+                                      case 'Duplex':
+                                        apartmentCost = PricingList().duplex;
+                                        break;
+                                    }
+                                    apartmentCost += 2500;
+                                    discountedCost = apartmentCost -
+                                        (discount * apartmentCost);
+                                    overallTotalCost =
+                                        discountedCost * routineLength;
+                                  });
+                                },
+                                icon: Icon(
+                                    Icons.arrow_drop_down_circle_outlined,
+                                    color: Colors.blue),
+                                decoration:
+                                    inputDecoration('Select House Type...'),
+                              ),
+                              Column(
+                                children: [
+                                  RadioListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    value: 'Weekly',
+                                    groupValue: radioValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radioValue = value;
+                                        discount =
+                                            SubscriptionPlans().weeklyPlan;
+                                        discountedCost = apartmentCost -
+                                            (discount * apartmentCost);
+                                        overallTotalCost =
+                                            discountedCost * routineLength;
+                                      });
+                                    },
+                                    title: Text(
+                                      'Weekly',
+                                      style: BodyTextStyle,
+                                    ),
+                                  ),
+                                  RadioListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    value: 'Bi-Weekly',
+                                    groupValue: radioValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radioValue = value;
+                                        discount =
+                                            SubscriptionPlans().biWeeklyPlan;
+                                        discountedCost = apartmentCost -
+                                            (discount * apartmentCost);
+                                        overallTotalCost =
+                                            discountedCost * routineLength;
+                                      });
+                                    },
+                                    title: Text(
+                                      'Bi-Weekly',
+                                      style: BodyTextStyle,
+                                    ),
+                                  ),
+                                  RadioListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    value: 'Monthly',
+                                    groupValue: radioValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radioValue = value;
+                                        discount =
+                                            SubscriptionPlans().monthlylyPlan;
+                                        discountedCost = apartmentCost -
+                                            (discount * apartmentCost);
+                                        overallTotalCost =
+                                            discountedCost * routineLength;
+                                      });
+                                    },
+                                    title: Text(
+                                      'Monthly',
+                                      style: BodyTextStyle,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              selectRoutineWidget(radioValue),
+                              ElevatedButton(
+                                child: Container(
+                                  width: 120,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text('Book Lagbaja!',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15)),
+                                      Icon(Icons.add_location_alt_rounded,
+                                          color: Colors.white),
+                                    ],
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue,
+                                  padding: EdgeInsets.all(5),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                ).copyWith(
+                                  side: MaterialStateProperty.resolveWith<
+                                      BorderSide>(
+                                    (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.pressed))
+                                        return BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1,
+                                        );
+                                      return null; // Defer to the widget's default.
+                                    },
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (_routineBookCleaningFormKey.currentState
+                                      .validate()) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    print(selectedDate);
+                                    print(selectedApartmentValue);
+                                    print(selectedLocation);
+                                    print(overallTotalCost);
+                                    CleaningSession initial =
+                                        CleaningSession.initialData();
+                                    processPayment(
+                                        context: context,
+                                        secretKey: secretKey.key,
+                                        amountPayable: overallTotalCost,
+                                        userEmail: user.email,
+                                        firstName: widget.userInfo.firstName,
+                                        lastName: widget.userInfo.lastName,
+                                        subscriptionType: radioValue,
+                                        userUid: user.uid);
+                                  }
+                                },
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),

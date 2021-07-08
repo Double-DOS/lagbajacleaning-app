@@ -177,7 +177,6 @@ class DatabaseService {
   }
 
   Future<SessionOverview> get completedCleaningSessionOverView async {
-    print("hereeeeeeeeeeeeeeeee");
     dynamic completedResult = await cleaningSessionCollection
         .where("userUid", isEqualTo: uid)
         .where("isCompleted", isEqualTo: true)

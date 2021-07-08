@@ -23,14 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.0+9
-  firebase_analytics: ^5.0.2
+  firebase_core: "^0.7.0"
+  firebase_auth: "^0.20.1"
   flutter_spinkit: "^4.1.2"
 
   # Add the dependencies for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore
-  firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.12.9+5
+  cloud_firestore: "^0.16.0+1"
   provider: ^5.0.0
 
 
@@ -73,10 +72,9 @@ flutter:
         - asset: assets/fonts/Montserrat-Regular.ttf
           weight: 300
         - asset: assets/fonts/Montserrat-Black.ttf
+          weight: 500
+        - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Montserrat-BoldItalic.ttf
-          weight: 700
-          style: italic
         - asset: assets/fonts/Montserrat-Italic.ttf
           style: italic
   #

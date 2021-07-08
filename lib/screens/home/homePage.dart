@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/screens/history/historyPage.dart';
 import 'package:lagbaja_cleaning/screens/home/dashboard.dart';
 import 'package:lagbaja_cleaning/screens/home/lastContainer.dart';
 import 'package:lagbaja_cleaning/screens/home/sideBar.dart';
+import 'package:lagbaja_cleaning/screens/profile/profileEdit.dart';
+import 'package:lagbaja_cleaning/screens/profile/profilePage.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +27,7 @@ class _HomePageState extends State<HomePage>
   Animation<double> _menuScaleAnimation;
   Animation<Offset> _slideAnimation;
 
-  final List<Widget> _tabs = [Dashboard(), HistoryPage(), LastContainer()];
+  final List<Widget> _tabs = [Dashboard(), HistoryPage(), ProfilePage()];
 
   @override
   void initState() {
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage>
             child: ScaleTransition(
                 scale: _menuScaleAnimation, child: SideDrawer())),
         AnimatedPositioned(
-          duration: Duration(milliseconds: 700),
+          duration: Duration(milliseconds: 300),
           top: 0,
           bottom: 0,
           left: isMenuClicked ? 0.4 * screenSize.width : 0,
@@ -66,27 +69,26 @@ class _HomePageState extends State<HomePage>
             child: Material(
               elevation: 10,
               child: Scaffold(
-                resizeToAvoidBottomInset: false,
+                resizeToAvoidBottomInset: true,
                 appBar: AppBar(
-                  backgroundColor: Colors.white38,
+                  backgroundColor: Colors.white10,
                   elevation: 0.0,
                   leading: IconButton(
-                    icon: Icon(isMenuClicked
-                        ? Icons.close_rounded
-                        : Icons.menu_rounded),
-                    color: Colors.blue,
-                    onPressed: () {
-                      setState(() {
-                        isMenuClicked = !isMenuClicked;
-                        print(isMenuClicked);
-                      });
-                      if (isMenuClicked) {
-                        _animationController.forward();
-                      } else {
-                        _animationController.reverse();
-                      }
-                    },
-                  ),
+                      icon: Icon(isMenuClicked
+                          ? Icons.close_rounded
+                          : Icons.menu_rounded),
+                      onPressed: () {
+                        setState(() {
+                          isMenuClicked = !isMenuClicked;
+                          print(isMenuClicked);
+                        });
+                        if (isMenuClicked) {
+                          _animationController.forward();
+                        } else {
+                          _animationController.reverse();
+                        }
+                      },
+                      color: Colors.blue),
                 ),
                 body: MultiProvider(
                     providers: [
@@ -116,30 +118,36 @@ class _HomePageState extends State<HomePage>
                         icon: Icon(
                           Icons.dashboard_outlined,
                           color: Colors.blue,
+                          size: 15,
                         ),
                         activeIcon: Icon(
                           Icons.dashboard_rounded,
                           color: Colors.blue,
+                          size: 20,
                         )),
                     BottomNavigationBarItem(
                         label: 'History',
                         icon: Icon(
                           Icons.location_history_outlined,
                           color: Colors.blue,
+                          size: 20,
                         ),
                         activeIcon: Icon(
                           Icons.location_history_rounded,
                           color: Colors.blue,
+                          size: 25,
                         )),
                     BottomNavigationBarItem(
-                        label: 'Settings',
+                        label: 'Profile',
                         icon: Icon(
-                          Icons.settings_outlined,
+                          CupertinoIcons.person_circle,
                           color: Colors.blue,
+                          size: 20,
                         ),
                         activeIcon: Icon(
-                          Icons.settings_rounded,
+                          CupertinoIcons.person_circle_fill,
                           color: Colors.blue,
+                          size: 25,
                         )),
                   ],
                 ),
