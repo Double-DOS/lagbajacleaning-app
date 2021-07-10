@@ -48,7 +48,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
+    MyUser user = Provider.of<MyUser>(context);
     UserProfileInfo userProfileUpdate = Provider.of<UserProfileInfo>(context);
     return loading
         ? Loading()

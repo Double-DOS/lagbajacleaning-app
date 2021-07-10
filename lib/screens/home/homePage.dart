@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,6 +11,7 @@ import 'package:lagbaja_cleaning/screens/home/sideBar.dart';
 import 'package:lagbaja_cleaning/screens/profile/profileEdit.dart';
 import 'package:lagbaja_cleaning/screens/profile/profilePage.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
+import 'package:lagbaja_cleaning/shared.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,7 +53,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     print(isMenuClicked);
     Size screenSize = MediaQuery.of(context).size;
-    final user = Provider.of<User>(context);
+    final user = Provider.of<MyUser>(context);
     return Stack(
       children: [
         SlideTransition(
@@ -98,57 +100,42 @@ class _HomePageState extends State<HomePage>
                       StreamProvider.value(
                           value: DatabaseService(uid: user.uid)
                               .allUserCleaningSession,
-                          initialData: [
-                            CleaningSession.initialData(),
+                          initialData: <CleaningSession>[
                           ])
                     ],
                     builder: (context, child) {
                       return _tabs[_index];
                     }),
-                bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: _index,
+                bottomNavigationBar: CurvedNavigationBar(
+                  backgroundColor: Colors.white,
+                  color: Colors.blue,
+                  buttonBackgroundColor: Colors.blue,
+                  height: 50,
+                  index: _index,
                   onTap: (index) {
                     setState(() {
                       _index = index;
                     });
                   },
                   items: [
-                    BottomNavigationBarItem(
-                        label: 'Dashboard',
-                        icon: Icon(
-                          Icons.dashboard_outlined,
-                          color: Colors.blue,
-                          size: 15,
-                        ),
-                        activeIcon: Icon(
-                          Icons.dashboard_rounded,
-                          color: Colors.blue,
-                          size: 20,
-                        )),
-                    BottomNavigationBarItem(
-                        label: 'History',
-                        icon: Icon(
-                          Icons.location_history_outlined,
-                          color: Colors.blue,
-                          size: 20,
-                        ),
-                        activeIcon: Icon(
-                          Icons.location_history_rounded,
-                          color: Colors.blue,
-                          size: 25,
-                        )),
-                    BottomNavigationBarItem(
-                        label: 'Profile',
-                        icon: Icon(
-                          CupertinoIcons.person_circle,
-                          color: Colors.blue,
-                          size: 20,
-                        ),
-                        activeIcon: Icon(
-                          CupertinoIcons.person_circle_fill,
-                          color: Colors.blue,
-                          size: 25,
-                        )),
+                    Icon(
+                      Icons.dashboard_rounded,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      CupertinoIcons.news_solid,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                    Icon(
+                      CupertinoIcons.person_circle_fill,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+
+
+
                   ],
                 ),
               ),

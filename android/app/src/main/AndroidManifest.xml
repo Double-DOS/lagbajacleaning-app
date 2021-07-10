@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lagbaja_cleaning">
    <application
-        android:label="lagbaja_cleaning"
+        android:label="LBJ Cleaning"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -38,4 +38,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET"
+        android:maxSdkVersion="23" />
 </manifest>

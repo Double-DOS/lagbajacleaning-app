@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lagbaja_cleaning/services/auth.dart';
+import 'package:lagbaja_cleaning/shared.dart';
 
 class SideDrawer extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -19,8 +20,10 @@ class SideDrawer extends StatelessWidget {
             borderOnForeground: false,
             child: ListTile(
               leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () => {},
+              title: Text('Liar'),
+              onTap: () => {
+
+              },
             ),
           ),
           Card(
@@ -41,8 +44,15 @@ class SideDrawer extends StatelessWidget {
             borderOnForeground: false,
             child: ListTile(
               leading: Icon(Icons.border_color),
-              title: Text('Feedback'),
-              onTap: () => {},
+              title: Text('Custom Request'),
+              subtitle: Text('coming soon'),
+              onTap: () => {
+                showDialog(context: context, builder: (BuildContext context){
+                  return Dialog(
+                    child: ComingSoonDialog
+                  );
+                },)
+              },
             ),
           ),
           Card(

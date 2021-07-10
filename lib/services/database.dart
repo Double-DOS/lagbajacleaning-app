@@ -11,7 +11,7 @@ class DatabaseService {
   DatabaseService({this.uid});
   //user info section
   final CollectionReference userInfoCollection =
-      Firestore.instance.collection('userInfo');
+      FirebaseFirestore.instance.collection('userInfo');
 
   Future updateUserInfo(
       {String firstName,
@@ -20,7 +20,7 @@ class DatabaseService {
       String state,
       String city,
       String phoneNumber}) async {
-    return await userInfoCollection.document(uid).setData({
+    return await userInfoCollection.doc(uid).set({
       "firstName": firstName,
       "lastName": lastName,
       "address": address,
@@ -30,45 +30,46 @@ class DatabaseService {
     });
   }
 
-  UserProfileInfo _userInfoFromDocumentSnapshot(DocumentSnapshot snapshot) {
+  UserProfileInfo _userInfoFromDocumentSnapshot(snapshot) {
     return snapshot.data == null
         ? null
         : UserProfileInfo(
             uid: uid,
-            firstName: snapshot.data["firstName"],
-            lastName: snapshot.data["lastName"],
-            state: snapshot.data["state"],
-            phoneNumber: snapshot.data["phoneNumber"],
-            address: snapshot.data["address"],
-            city: snapshot.data["city"],
+            firstName: snapshot.data()["firstName"],
+            lastName: snapshot.data()["lastName"],
+            state: snapshot.data()["state"],
+            phoneNumber: snapshot.data()["phoneNumber"],
+            address: snapshot.data()["address"],
+            city: snapshot.data()["city"],
           );
   }
 
   Stream<UserProfileInfo> get getUserInfo {
     return userInfoCollection
-        .document(uid)
+        .doc(uid)
         .snapshots()
         .map(_userInfoFromDocumentSnapshot);
   }
 
   // secret keys section
   final CollectionReference secretKeyCollection =
-      Firestore.instance.collection('secretKeys');
+      FirebaseFirestore.instance.collection('secretKeys');
 
-  SecretKey _getSecretKeyFromDb(DocumentSnapshot snapshot) {
-    return SecretKey(snapshot.data["key"]);
+  SecretKey _getSecretKeyFromDb(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    return SecretKey(snapshot.data()["key"]);
   }
 
   Stream<SecretKey> get getPaystackSecretKey {
     return secretKeyCollection
-        .document('paystack-key')
+        .doc('paystack-key')
         .snapshots()
         .map(_getSecretKeyFromDb);
   }
 
   //cleaning sessions section
   final CollectionReference cleaningSessionCollection =
-      Firestore.instance.collection('cleaningSession');
+      FirebaseFirestore.instance.collection('cleaningSession');
 
   //create and update cleaning session
   Future updateCleaningSession(
@@ -103,7 +104,7 @@ class DatabaseService {
       "cleaningDate": cleaningDate
     };
     try {
-      void added = await cleaningSessionCollection.document().setData(data);
+      void added = await cleaningSessionCollection.doc().set(data);
       return null;
     } catch (e) {
       return null;
@@ -111,47 +112,47 @@ class DatabaseService {
   }
 
   CleaningSession _cleaningSessionFromDocumentSnapshot(
-      DocumentSnapshot snapshot) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.data == null
         ? null
         : CleaningSession(
-            uid: snapshot.data["uid"],
-            userUid: snapshot.data["userUid"],
-            location: snapshot.data["location"],
-            apartmentType: snapshot.data["apartmentType"],
-            orderDate: snapshot.data["dateOrdered"].toDate(),
-            cleaningDate: snapshot.data["cleaningDate"].toDate(),
-            subscription: snapshot.data["subscription"],
-            routineLength: snapshot.data["routineLength"],
-            routineProgress: snapshot.data["routineProgress"],
-            cleaningDay: snapshot.data["cleaningDay"],
-            totalCost: snapshot.data["totalCost"],
-            rating: snapshot.data["rating"],
-            isRated: snapshot.data["isRated"],
-            isPaid: snapshot.data["isPaid"],
-            isCompleted: snapshot.data["isCompleted"]);
+            uid: snapshot.data()["uid"],
+            userUid: snapshot.data()["userUid"],
+            location: snapshot.data()["location"],
+            apartmentType: snapshot.data()["apartmentType"],
+            orderDate: snapshot.data()["dateOrdered"].toDate(),
+            cleaningDate: snapshot.data()["cleaningDate"].toDate(),
+            subscription: snapshot.data()["subscription"],
+            routineLength: snapshot.data()["routineLength"],
+            routineProgress: snapshot.data()["routineProgress"],
+            cleaningDay: snapshot.data()["cleaningDay"],
+            totalCost: snapshot.data()["totalCost"],
+            rating: snapshot.data()["rating"],
+            isRated: snapshot.data()["isRated"],
+            isPaid: snapshot.data()["isPaid"],
+            isCompleted: snapshot.data()["isCompleted"]);
   }
 
   List<CleaningSession> _cleaningSessionListFromQuerySnapshot(
-      QuerySnapshot query) {
+      QuerySnapshot<Map<String, dynamic>> query) {
     List<CleaningSession> cleaningList = [];
-    query.documents.forEach((snapshot) {
+    query.docs.forEach((snapshot) {
       cleaningList.add(CleaningSession(
-          uid: snapshot.data["uid"],
-          userUid: snapshot.data["userUid"],
-          orderDate: snapshot.data["dateOrdered"].toDate(),
-          cleaningDate: snapshot.data["cleaningDate"].toDate(),
-          location: snapshot.data["location"],
-          apartmentType: snapshot.data["apartmentType"],
-          subscription: snapshot.data["subscription"],
-          routineLength: snapshot.data["routineLength"],
-          routineProgress: snapshot.data["routineProgress"],
-          cleaningDay: snapshot.data["cleaningDay"],
-          totalCost: snapshot.data["totalCost"],
-          rating: snapshot.data["rating"],
-          isRated: snapshot.data["isRated"],
-          isPaid: snapshot.data["isPaid"],
-          isCompleted: snapshot.data["isCompleted"]));
+          uid: snapshot.data()["uid"],
+          userUid: snapshot.data()["userUid"],
+          orderDate: snapshot.data()["dateOrdered"].toDate(),
+          cleaningDate: snapshot.data()["cleaningDate"].toDate(),
+          location: snapshot.data()["location"],
+          apartmentType: snapshot.data()["apartmentType"],
+          subscription: snapshot.data()["subscription"],
+          routineLength: snapshot.data()["routineLength"],
+          routineProgress: snapshot.data()["routineProgress"],
+          cleaningDay: snapshot.data()["cleaningDay"],
+          totalCost: snapshot.data()["totalCost"],
+          rating: snapshot.data()["rating"],
+          isRated: snapshot.data()["isRated"],
+          isPaid: snapshot.data()["isPaid"],
+          isCompleted: snapshot.data()["isCompleted"]));
     });
     return cleaningList;
   }
@@ -177,22 +178,21 @@ class DatabaseService {
   }
 
   Future<SessionOverview> get completedCleaningSessionOverView async {
-    dynamic completedResult = await cleaningSessionCollection
+    QuerySnapshot completedResult = await cleaningSessionCollection
         .where("userUid", isEqualTo: uid)
         .where("isCompleted", isEqualTo: true)
-        .getDocuments();
-    dynamic completedDocs = completedResult.documents.length;
+        .get();
+    int completedDocs = completedResult.docs.length;
 
-    dynamic pendingResult = await cleaningSessionCollection
+    QuerySnapshot pendingResult = await cleaningSessionCollection
         .where("userUid", isEqualTo: uid)
         .where("isCompleted", isEqualTo: false)
-        .getDocuments();
-    dynamic pendingDocs = pendingResult.documents.length;
+        .get();
+    int pendingDocs = pendingResult.docs.length;
 
-    dynamic totalResult = await cleaningSessionCollection
-        .where("userUid", isEqualTo: uid)
-        .getDocuments();
-    dynamic totalDocs = totalResult.documents.length;
+    QuerySnapshot totalResult =
+        await cleaningSessionCollection.where("userUid", isEqualTo: uid).get();
+    int totalDocs = totalResult.docs.length;
 
     return SessionOverview(
         completed: completedDocs.toString(),

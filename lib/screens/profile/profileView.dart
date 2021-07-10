@@ -15,7 +15,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     UserProfileInfo userInfo = Provider.of<UserProfileInfo>(context);
-    User user = Provider.of<User>(context);
+    MyUser user = Provider.of<MyUser>(context);
     return Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
         child: ListView(

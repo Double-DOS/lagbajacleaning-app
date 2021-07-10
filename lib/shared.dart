@@ -51,6 +51,26 @@ const SmallTextStyle = TextStyle(
   fontSize: SmallTextSize,
   color: Colors.white,
 );
+Widget ComingSoonDialog = Container(
+  height: 300,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(50),
+  ),
+  child: Center(
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+      children: [
+        Image(
+          height: 200,
+          image: AssetImage("assets/images/coming_soon.png")
+        ),
+        Center(child: Text('Coming Soon!', style: BoldTitleTextStyle.copyWith(color: Colors.blue),))
+      ],
+    ),
+    ),
+  ),
+);
 
 ButtonStyle outlinedButtonStyle(BuildContext context) {
   return OutlinedButton.styleFrom(
@@ -194,7 +214,7 @@ Widget successImage() {
       children: [
         Image(
           height: 250,
-          image: AssetImage('assets/images/payment-success.png'),
+          image: AssetImage('assets/images/payment_success.png'),
         ),
         Text(
           'We are on our way!',

@@ -1,8 +1,8 @@
-class User {
+class MyUser {
   final String uid;
   final String email;
 
-  User({this.uid, this.email});
+  MyUser({this.uid, this.email});
 }
 
 class UserProfileInfo {

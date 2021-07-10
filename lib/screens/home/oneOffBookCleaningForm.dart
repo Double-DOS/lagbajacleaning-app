@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:lagbaja_cleaning/models/pricing.dart';
@@ -7,7 +8,7 @@ import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:lagbaja_cleaning/shared.dart';
-import 'package:paystack_manager/paystack_pay_manager.dart';
+// import 'package:paystack_manager/paystack_pay_manager.dart';
 import 'package:provider/provider.dart';
 
 class OneOffBookCleaningForm extends StatefulWidget {
@@ -36,6 +37,15 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
   double totalCost = 0.0;
   double sliderValue = 0;
   dynamic result;
+  final plugin = PaystackPlugin();
+
+  @override
+  void initState() {
+    plugin.initialize(
+        publicKey: 'sk_test_a26e37713f79c65a969e45e23a6ee76cc92c7122');
+    super.initState();
+  }
+
   void displayDatePicker() async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -72,50 +82,50 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<MyUser>(context);
     final secretKey = Provider.of<SecretKey>(context);
 
-    void _onPaymentSuccessful(Transaction transaction) {
-      print("Transaction was successful");
-      print("Transaction Message ===> ${transaction.message}");
-      print("Transaction Refrence ===> ${transaction.refrenceNumber}");
+    // void _onPaymentSuccessful(Transaction transaction) {
+    //   print("Transaction was successful");
+    //   print("Transaction Message ===> ${transaction.message}");
+    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
 
-      CleaningSession initial = CleaningSession.initialData();
-      result = DatabaseService(uid: user.uid).updateCleaningSession(
-          location: selectedLocation,
-          apartmentType: selectedApartmentValue,
-          subscription: initial.subscription,
-          userUid: user.uid,
-          totalCost: totalCost,
-          isRated: initial.isRated,
-          isPaid: true,
-          cleaningDay: initial.cleaningDay,
-          isCompleted: initial.isCompleted,
-          dateOrdered: initial.orderDate,
-          cleaningDate: selectedDate);
-      print("RESULT ----> ${result.toString()}");
-      setState(() {
-        successful = true;
-        failed = false;
-      });
-    }
+    //   CleaningSession initial = CleaningSession.initialData();
+    //   result = DatabaseService(uid: user.uid).updateCleaningSession(
+    //       location: selectedLocation,
+    //       apartmentType: selectedApartmentValue,
+    //       subscription: initial.subscription,
+    //       userUid: user.uid,
+    //       totalCost: totalCost,
+    //       isRated: initial.isRated,
+    //       isPaid: true,
+    //       cleaningDay: initial.cleaningDay,
+    //       isCompleted: initial.isCompleted,
+    //       dateOrdered: initial.orderDate,
+    //       cleaningDate: selectedDate);
+    //   print("RESULT ----> ${result.toString()}");
+    //   setState(() {
+    //     successful = true;
+    //     failed = false;
+    //   });
+    // }
 
-    void _onPaymentPending(Transaction transaction) {
-      print("Transaction is pending");
-      print("Transaction Refrence ===> ${transaction.refrenceNumber}");
-    }
+    // void _onPaymentPending(Transaction transaction) {
+    //   print("Transaction is pending");
+    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
+    // }
 
-    void _onPaymentFailed(Transaction transaction) {
-      setState(() {
-        failed = true;
-      });
-      print("Transaction failed");
-      print("Transaction Message ===> ${transaction.message}");
-    }
+    // void _onPaymentFailed(Transaction transaction) {
+    //   setState(() {
+    //     failed = true;
+    //   });
+    //   print("Transaction failed");
+    //   print("Transaction Message ===> ${transaction.message}");
+    // }
 
-    void _onPaymentCancelled(Transaction transaction) {
-      print("Transaction was cancelled");
-    }
+    // void _onPaymentCancelled(Transaction transaction) {
+    //   print("Transaction was cancelled");
+    // }
 
     void processPayment(
         {BuildContext context,
@@ -125,41 +135,55 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
         String lastName,
         String subscriptionType,
         String secretKey,
-        String userUid}) {
+        String userUid}) async {
       try {
-        PaystackPayManager(context: context)
-          // Don't store your secret key on users device.
-          // Make sure this is retrive from your server at run time
-          ..setSecretKey(secretKey)
-          //accepts widget
-          ..setCompanyAssetImage(Image(
-            height: 50,
-            image: AssetImage("assets/images/lagbaja.png"),
-          ))
-          ..setAmount(amountPayable.toInt() * 100)
-          // ..setReference("your-unique-transaction-reference")
-          ..setReference(
-              "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
-          ..setCurrency("NGN")
-          ..setEmail(userEmail)
-          ..setFirstName(firstName)
-          ..setLastName(lastName)
-          ..setMetadata(
-            {
-              "custom_fields": [
-                {
-                  "value": "snapTask",
-                  "display_name": "Payment to",
-                  "variable_name": "payment_to"
-                }
-              ]
-            },
-          )
-          ..onSuccesful(_onPaymentSuccessful)
-          ..onPending(_onPaymentPending)
-          ..onFailed(_onPaymentFailed)
-          ..onCancel(_onPaymentCancelled)
-          ..initialize();
+        Charge charge = Charge()
+          ..amount = 10000
+          ..reference =
+              "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}"
+          // or ..accessCode = _getAccessCodeFrmInitialization()
+          ..email = 'customer@email.com';
+        CheckoutResponse response = await plugin.checkout(
+          context,
+          method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+          charge: charge,
+        );
+
+        // PaystackPayManager(context: context)
+
+        //   // Don't store your secret key on users device.
+        //   // Make sure this is retrive from your server at run time
+        //   ..setSecretKey(secretKey)
+        //   //accepts widget
+        //   ..setCompanyAssetImage(Image(
+        //     height: 50,
+        //     image: AssetImage("assets/images/lagbaja.png"),
+        //   ))
+        //   ..setAmount(amountPayable.toInt() * 100)
+        //   // ..setReference("your-unique-transaction-reference")
+        //   ..setReference(
+        //       "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
+        //   ..setCurrency("NGN")
+        //   ..setEmail(userEmail)
+        //   ..setFirstName(firstName)
+        //   ..setLastName(lastName)
+        //   ..setMetadata(
+        //     {
+        //       "custom_fields": [
+        //         {
+        //           "value": "snapTask",
+        //           "display_name": "Payment to",
+        //           "variable_name": "payment_to"
+        //         }
+        //       ]
+        //     },
+        //   )
+        //   ..onSuccesful(_onPaymentSuccessful)
+        //   ..onPending(_onPaymentPending)
+        //   ..onFailed(_onPaymentFailed)
+        //   ..onCancel(_onPaymentCancelled)
+        //   ..initialize();
+        print('object');
       } catch (error) {
         print("Payment Error ==> $error");
       }

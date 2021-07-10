@@ -114,10 +114,10 @@ class _SignInPageState extends State<SignInPage> {
                                 });
                                 dynamic result =
                                     await _auth.emailSignIn(email, password);
-                                if (result == null) {
+                                if (result != "pass") {
                                   setState(() {
                                     loading = false;
-                                    error = 'Incorrect Login Details!';
+                                    error = result;
                                   });
                                   showDialog(
                                       context: context,

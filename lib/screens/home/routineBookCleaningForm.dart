@@ -6,7 +6,7 @@ import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:lagbaja_cleaning/shared.dart';
-import 'package:paystack_manager/paystack_pay_manager.dart';
+// import 'package:paystack_manager/paystack_pay_manager.dart';
 import 'package:provider/provider.dart';
 
 class RoutineBookCleaningForm extends StatefulWidget {
@@ -195,50 +195,50 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<MyUser>(context);
     final secretKey = Provider.of<SecretKey>(context);
-    void _onPaymentSuccessful(Transaction transaction) {
-      print("Transaction was successful");
-      print("Transaction Message ===> ${transaction.message}");
-      print("Transaction Refrence ===> ${transaction.refrenceNumber}");
+    // void _onPaymentSuccessful(Transaction transaction) {
+    //   print("Transaction was successful");
+    //   print("Transaction Message ===> ${transaction.message}");
+    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
 
-      CleaningSession initial = CleaningSession.initialData();
-      dynamic result = DatabaseService(uid: user.uid).updateCleaningSession(
-          location: selectedLocation,
-          apartmentType: selectedApartmentValue,
-          subscription: radioValue,
-          userUid: user.uid,
-          totalCost: overallTotalCost,
-          isRated: initial.isRated,
-          isPaid: true,
-          routineLength: routineLength.toInt(),
-          isCompleted: initial.isCompleted,
-          cleaningDay: preferredCleaningDay,
-          dateOrdered: initial.orderDate,
-          cleaningDate: selectedDate);
-      print("RESULT ----> ${result.toString()}");
-      setState(() {
-        successful = true;
-        failed = false;
-      });
-    }
+    //   CleaningSession initial = CleaningSession.initialData();
+    //   dynamic result = DatabaseService(uid: user.uid).updateCleaningSession(
+    //       location: selectedLocation,
+    //       apartmentType: selectedApartmentValue,
+    //       subscription: radioValue,
+    //       userUid: user.uid,
+    //       totalCost: overallTotalCost,
+    //       isRated: initial.isRated,
+    //       isPaid: true,
+    //       routineLength: routineLength.toInt(),
+    //       isCompleted: initial.isCompleted,
+    //       cleaningDay: preferredCleaningDay,
+    //       dateOrdered: initial.orderDate,
+    //       cleaningDate: selectedDate);
+    //   print("RESULT ----> ${result.toString()}");
+    //   setState(() {
+    //     successful = true;
+    //     failed = false;
+    //   });
+    // }
 
-    void _onPaymentPending(Transaction transaction) {
-      print("Transaction is pending");
-      print("Transaction Refrence ===> ${transaction.refrenceNumber}");
-    }
+    // void _onPaymentPending(Transaction transaction) {
+    //   print("Transaction is pending");
+    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
+    // }
 
-    void _onPaymentFailed(Transaction transaction) {
-      setState(() {
-        failed = true;
-      });
-      print("Transaction failed");
-      print("Transaction Message ===> ${transaction.message}");
-    }
+    // void _onPaymentFailed(Transaction transaction) {
+    //   setState(() {
+    //     failed = true;
+    //   });
+    //   print("Transaction failed");
+    //   print("Transaction Message ===> ${transaction.message}");
+    // }
 
-    void _onPaymentCancelled(Transaction transaction) {
-      print("Transaction was cancelled");
-    }
+    // void _onPaymentCancelled(Transaction transaction) {
+    //   print("Transaction was cancelled");
+    // }
 
     void processPayment(
         {BuildContext context,
@@ -250,39 +250,40 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
         String secretKey,
         String userUid}) {
       try {
-        PaystackPayManager(context: context)
-          // Don't store your secret key on users device.
-          // Make sure this is retrive from your server at run time
-          ..setSecretKey(secretKey)
-          //accepts widget
-          ..setCompanyAssetImage(Image(
-            height: 50,
-            image: AssetImage("assets/images/lagbaja.png"),
-          ))
-          ..setAmount(amountPayable.toInt() * 100)
-          // ..setReference("your-unique-transaction-reference")
-          ..setReference(
-              "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
-          ..setCurrency("NGN")
-          ..setEmail(userEmail)
-          ..setFirstName(firstName)
-          ..setLastName(lastName)
-          ..setMetadata(
-            {
-              "custom_fields": [
-                {
-                  "value": "snapTask",
-                  "display_name": "Payment to",
-                  "variable_name": "payment_to"
-                }
-              ]
-            },
-          )
-          ..onSuccesful(_onPaymentSuccessful)
-          ..onPending(_onPaymentPending)
-          ..onFailed(_onPaymentFailed)
-          ..onCancel(_onPaymentCancelled)
-          ..initialize();
+        // PaystackPayManager(context: context)
+        //   // Don't store your secret key on users device.
+        //   // Make sure this is retrive from your server at run time
+        //   ..setSecretKey(secretKey)
+        //   //accepts widget
+        //   ..setCompanyAssetImage(Image(
+        //     height: 50,
+        //     image: AssetImage("assets/images/lagbaja.png"),
+        //   ))
+        //   ..setAmount(amountPayable.toInt() * 100)
+        //   // ..setReference("your-unique-transaction-reference")
+        //   ..setReference(
+        //       "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
+        //   ..setCurrency("NGN")
+        //   ..setEmail(userEmail)
+        //   ..setFirstName(firstName)
+        //   ..setLastName(lastName)
+        //   ..setMetadata(
+        //     {
+        //       "custom_fields": [
+        //         {
+        //           "value": "snapTask",
+        //           "display_name": "Payment to",
+        //           "variable_name": "payment_to"
+        //         }
+        //       ]
+        //     },
+        //   )
+        //   ..onSuccesful(_onPaymentSuccessful)
+        //   ..onPending(_onPaymentPending)
+        //   ..onFailed(_onPaymentFailed)
+        //   ..onCancel(_onPaymentCancelled)
+        //   ..initialize();
+        print('object');
       } catch (error) {
         print("Payment Error ==> $error");
       }
