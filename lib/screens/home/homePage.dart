@@ -100,14 +100,13 @@ class _HomePageState extends State<HomePage>
                       StreamProvider.value(
                           value: DatabaseService(uid: user.uid)
                               .allUserCleaningSession,
-                          initialData: <CleaningSession>[
-                          ])
+                          initialData: <CleaningSession>[])
                     ],
                     builder: (context, child) {
                       return _tabs[_index];
                     }),
                 bottomNavigationBar: CurvedNavigationBar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.white10,
                   color: Colors.blue,
                   buttonBackgroundColor: Colors.blue,
                   height: 50,
@@ -133,9 +132,6 @@ class _HomePageState extends State<HomePage>
                       color: Colors.white,
                       size: 25,
                     ),
-
-
-
                   ],
                 ),
               ),

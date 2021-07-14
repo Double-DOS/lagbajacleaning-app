@@ -22,7 +22,6 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: userInfo['email'], password: userInfo['password']);
-      print(result.user);
       User user = result.user;
       DatabaseService(uid: user.uid).updateUserInfo(
           firstName: userInfo["firstName"],
@@ -35,7 +34,9 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       print("Failed on the error ==>${e.code}");
       print(e.message);
-      return e.message;
+      if (e.code == 'account-exists-with-different-credential')
+        return "Account with that email already exists!";
+      return null;
     }
   }
 
@@ -45,17 +46,19 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
-      print(user);
       return "pass";
     } on FirebaseAuthException catch (e) {
       print(e.message);
       print(e.code);
       if (e.code == 'wrong-password') return "Incorrect Password!";
       if (e.code == 'user-not-found') return "No user with that email!";
-      if (e.code == 'account-exists-with-different-credential')
-        return "Account with that email already exists!";
+
       return null;
     }
+  }
+
+  Future resetPassword(String email)async{
+    return await _auth.sendPasswordResetEmail(email: email);
   }
 
   //sign out

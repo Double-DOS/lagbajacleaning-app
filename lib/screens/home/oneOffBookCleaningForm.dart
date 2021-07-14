@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,6 +11,8 @@ import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:lagbaja_cleaning/shared.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 // import 'package:paystack_manager/paystack_pay_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +47,7 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
   @override
   void initState() {
     plugin.initialize(
-        publicKey: 'sk_test_a26e37713f79c65a969e45e23a6ee76cc92c7122');
+        publicKey: 'pk_test_efadf868c8117e9fdf07eaf28111bb8ec018c9ef');
     super.initState();
   }
 
@@ -85,30 +90,27 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
     final user = Provider.of<MyUser>(context);
     final secretKey = Provider.of<SecretKey>(context);
 
-    // void _onPaymentSuccessful(Transaction transaction) {
-    //   print("Transaction was successful");
-    //   print("Transaction Message ===> ${transaction.message}");
-    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
-
-    //   CleaningSession initial = CleaningSession.initialData();
-    //   result = DatabaseService(uid: user.uid).updateCleaningSession(
-    //       location: selectedLocation,
-    //       apartmentType: selectedApartmentValue,
-    //       subscription: initial.subscription,
-    //       userUid: user.uid,
-    //       totalCost: totalCost,
-    //       isRated: initial.isRated,
-    //       isPaid: true,
-    //       cleaningDay: initial.cleaningDay,
-    //       isCompleted: initial.isCompleted,
-    //       dateOrdered: initial.orderDate,
-    //       cleaningDate: selectedDate);
-    //   print("RESULT ----> ${result.toString()}");
-    //   setState(() {
-    //     successful = true;
-    //     failed = false;
-    //   });
-    // }
+    void _onPaymentSuccessful() {
+      CleaningSession initial = CleaningSession.initialData();
+      result = DatabaseService(uid: user.uid).updateCleaningSession(
+          location: selectedLocation,
+          apartmentType: selectedApartmentValue,
+          subscription: initial.subscription,
+          userUid: user.uid,
+          totalCost: totalCost,
+          isRated: initial.isRated,
+          isPaid: true,
+          cleaningDay: initial.cleaningDay,
+          isCompleted: initial.isCompleted,
+          dateOrdered: initial.orderDate,
+          cleaningDate: selectedDate);
+      // print("RESULT ----> ${result.toString()}");
+      setState(() {
+        successful = true;
+        failed = false;
+        loading = false;
+      });
+    }
 
     // void _onPaymentPending(Transaction transaction) {
     //   print("Transaction is pending");
@@ -138,54 +140,38 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
         String userUid}) async {
       try {
         Charge charge = Charge()
-          ..amount = 10000
+          ..amount = amountPayable.toInt() * 100
           ..reference =
               "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}"
           // or ..accessCode = _getAccessCodeFrmInitialization()
-          ..email = 'customer@email.com';
+          ..email = userEmail;
         CheckoutResponse response = await plugin.checkout(
           context,
           method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
           charge: charge,
         );
+        dynamic transactionRef = response.reference;
+        var client = http.Client();
+        var url = Uri.parse(
+            'https://api.paystack.co/transaction/verify/$transactionRef');
 
-        // PaystackPayManager(context: context)
-
-        //   // Don't store your secret key on users device.
-        //   // Make sure this is retrive from your server at run time
-        //   ..setSecretKey(secretKey)
-        //   //accepts widget
-        //   ..setCompanyAssetImage(Image(
-        //     height: 50,
-        //     image: AssetImage("assets/images/lagbaja.png"),
-        //   ))
-        //   ..setAmount(amountPayable.toInt() * 100)
-        //   // ..setReference("your-unique-transaction-reference")
-        //   ..setReference(
-        //       "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
-        //   ..setCurrency("NGN")
-        //   ..setEmail(userEmail)
-        //   ..setFirstName(firstName)
-        //   ..setLastName(lastName)
-        //   ..setMetadata(
-        //     {
-        //       "custom_fields": [
-        //         {
-        //           "value": "snapTask",
-        //           "display_name": "Payment to",
-        //           "variable_name": "payment_to"
-        //         }
-        //       ]
-        //     },
-        //   )
-        //   ..onSuccesful(_onPaymentSuccessful)
-        //   ..onPending(_onPaymentPending)
-        //   ..onFailed(_onPaymentFailed)
-        //   ..onCancel(_onPaymentCancelled)
-        //   ..initialize();
-        print('object');
+        var verifyResponse = await client
+            .get(url, headers: {"Authorization": "Bearer $secretKey"});
+        log(verifyResponse.body);
+        var jsonResponse =
+            convert.jsonDecode(verifyResponse.body) as Map<String, dynamic>;
+        print(jsonResponse);
+        if (jsonResponse["status"]) {
+          _onPaymentSuccessful();
+        } else {
+          setState(() {
+            failed = true;
+          });
+        }
       } catch (error) {
-        print("Payment Error ==> $error");
+        setState(() {
+          failed = true;
+        });
       }
     }
 
@@ -193,7 +179,7 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
     return successful
         ? successImage()
         : failed
-            ? Text('failed')
+            ? failedImage()
             : loading
                 ? SpinKitChasingDots(
                     size: 50.0,
@@ -234,29 +220,24 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
                                   print(selectedLocation);
                                 },
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Switch.adaptive(
-                                    value: _switchValue,
-                                    onChanged: (T) {
-                                      setState(() {
-                                        _switchValue = !_switchValue;
-                                      });
-                                      if (_switchValue) {
-                                        myController.text =
-                                            widget.userInfo.address;
-                                        selectedLocation = myController.text;
-                                      }
-                                    },
-                                    activeColor: Colors.blue[900],
-                                  ),
-                                  Text(
-                                    'Use Home Address',
-                                    style: SmallTextStyle.copyWith(
-                                        color: Colors.blue),
-                                  )
-                                ],
+                              SwitchListTile.adaptive(
+                                dense: true,
+                                title: Text(
+                                  'Use Home Address',
+                                  style: SmallTextStyle.copyWith(
+                                      color: Colors.blue),
+                                ),
+                                value: _switchValue,
+                                onChanged: (T) {
+                                  setState(() {
+                                    _switchValue = !_switchValue;
+                                  });
+                                  if (_switchValue) {
+                                    myController.text = widget.userInfo.address;
+                                    selectedLocation = myController.text;
+                                  }
+                                },
+                                activeColor: Colors.blue[900],
                               ),
                               DropdownButtonFormField(
                                 items: buildApartmentDropdown(),
@@ -309,6 +290,11 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
                                   RadioListTile(
                                     contentPadding: EdgeInsets.zero,
                                     value: 'Mild',
+                                    subtitle: Text(
+                                      'INCLUDES: sweeping, mopping, tidying, and surface cleaning',
+                                      style: SmallTextStyle.copyWith(
+                                          color: Colors.blue),
+                                    ),
                                     groupValue: radioValue,
                                     onChanged: (value) {
                                       setState(() {
@@ -333,6 +319,11 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
                                         totalCost = levelCost + apartmentCost;
                                       });
                                     },
+                                    subtitle: Text(
+                                      'INCLUDES: vaccuming, cleaining of all appliances, window cleaning',
+                                      style: SmallTextStyle.copyWith(
+                                          color: Colors.blue),
+                                    ),
                                     title: Text(
                                       'Standard Cleaning',
                                       style: BodyTextStyle,
@@ -349,6 +340,11 @@ class _OneOffBookCleaningFormState extends State<OneOffBookCleaningForm> {
                                         totalCost = levelCost + apartmentCost;
                                       });
                                     },
+                                    subtitle: Text(
+                                      'INCLUDES: removing all dirt and grime, window scrubbing, grass cutting, fumigation, weeding',
+                                      style: SmallTextStyle.copyWith(
+                                          color: Colors.blue),
+                                    ),
                                     title: Text(
                                       'Deep Cleaning',
                                       style: BodyTextStyle,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:lagbaja_cleaning/screens/home/pricingModal.dart';
 import 'package:lagbaja_cleaning/shared.dart';
 
 class LastContainer extends StatelessWidget {
@@ -12,7 +13,11 @@ class LastContainer extends StatelessWidget {
         children: [
           TextButton.icon(
             icon: Icon(Icons.money),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return PricingModal();
+              }));
+            },
             label: Text('Pricing Plans', style: TextStyle(fontSize: 15)),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -24,15 +29,14 @@ class LastContainer extends StatelessWidget {
           ),
           TextButton.icon(
             icon: Icon(Icons.car_rental),
-            onPressed: (){
+            onPressed: () {
               showDialog(
                   context: context,
-                  builder: (BuildContext context){
+                  builder: (BuildContext context) {
                     return Dialog(
                       child: ComingSoonDialog,
                     );
-                  }
-              );
+                  });
             },
             label: Text('Vehicle Cleaning', style: TextStyle(fontSize: 15)),
             style: ButtonStyle(

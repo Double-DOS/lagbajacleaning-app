@@ -37,9 +37,9 @@ class _HistoryPageState extends State<HistoryPage> {
             margin: EdgeInsets.symmetric(vertical: 5),
             child: cleaningSessionsList.length == 0
                 ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Center(
-                        heightFactor: 1.5,
                         child: Hero(
                           transitionOnUserGestures: true,
                           tag: 'empty-trash',
@@ -48,12 +48,14 @@ class _HistoryPageState extends State<HistoryPage> {
                           ),
                         ),
                       ),
-                      Text(
-                        'No Cleaning Sessions yet!',
-                        style: BoldTitleTextStyle.copyWith(
-                            color: Colors.blue,
-                            fontSize: 20,
-                            fontStyle: FontStyle.normal),
+                      Container(
+                        child: Text(
+                          'No Cleaning Sessions yet!',
+                          style: BoldTitleTextStyle.copyWith(
+                              color: Colors.blue,
+                              fontSize: 20,
+                              fontStyle: FontStyle.normal),
+                        ),
                       )
                     ],
                   )

@@ -22,6 +22,10 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   bool loading = false;
 
   //text field state
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final houseAddressController = TextEditingController();
+  final phoneController = TextEditingController();
   String firstName = '';
   String lastName = '';
   String countryValue = "";
@@ -31,6 +35,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   String stateOfResidence = '';
   String cityOfResidence = '';
   String error = '';
+  Icon icon;
   DefaultCountry _defaultCountry = DefaultCountry.Nigeria;
   Widget _getCountryPicker() {
     // call expansion Panel
@@ -47,9 +52,28 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   }
 
   @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    firstNameController.dispose();
+    lastNameController.dispose();
+    houseAddressController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     MyUser user = Provider.of<MyUser>(context);
     UserProfileInfo userProfileUpdate = Provider.of<UserProfileInfo>(context);
+    // setState(() {
+    //   firstName = userProfileUpdate.firstName;
+    //   lastName = userProfileUpdate.lastName;
+    //   phoneNumber = userProfileUpdate.phoneNumber;
+    //   houseAddress = userProfileUpdate.address;
+    //   stateOfResidence = userProfileUpdate.state;
+    //   cityOfResidence = userProfileUpdate.city;
+    // });
     return loading
         ? Loading()
         : Container(
@@ -170,6 +194,31 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                 print('1111');
                                 loading = true;
                               });
+
+                              if (stateOfResidence == null ||
+                                  cityOfResidence == null) {
+                                setState(() {
+                                  stateOfResidence = userProfileUpdate.state;
+                                  cityOfResidence = userProfileUpdate.city;
+                                });
+                              }
+
+                              if (firstName.isEmpty)
+                                setState(() {
+                                  firstName = userProfileUpdate.firstName;
+                                });
+                              if (lastName.isEmpty)
+                                setState(() {
+                                  lastName = userProfileUpdate.lastName;
+                                });
+                              if (houseAddress.isEmpty)
+                                setState(() {
+                                  houseAddress = userProfileUpdate.address;
+                                });
+                              if (phoneNumber.isEmpty)
+                                setState(() {
+                                  phoneNumber = userProfileUpdate.phoneNumber;
+                                });
                               dynamic userInfo =
                                   await DatabaseService(uid: user.uid)
                                       .updateUserInfo(
@@ -180,46 +229,45 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                                           city: cityOfResidence,
                                           phoneNumber: phoneNumber);
 
-                              if (userInfo == null) {
-                                setState(() {
-                                  loading = false;
-                                  error =
-                                      'Profile Update Failed! Please Try Again.';
-                                });
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        backgroundColor: Colors.lightBlue,
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 250,
-                                          padding: EdgeInsets.all(20.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                error,
-                                                textAlign: TextAlign.center,
-                                                style: SmallTextStyle.copyWith(
-                                                    fontSize: 20.0),
-                                              ),
-                                              Icon(
-                                                CupertinoIcons.xmark_circle,
-                                                size: 80.0,
-                                                color: Colors.white,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              }
+                              setState(() {
+                                loading = false;
+                                error = 'Profile Update Successful!';
+                                icon = Icon(
+                                  CupertinoIcons.arrow_up_circle_fill,
+                                  size: 150.0,
+                                  color: Colors.white,
+                                );
+                              });
                             }
+
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    backgroundColor: Colors.lightBlue,
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 250,
+                                      padding: EdgeInsets.all(20.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            error,
+                                            textAlign: TextAlign.center,
+                                            style: SmallTextStyle.copyWith(
+                                                fontSize: 20.0),
+                                          ),
+                                          icon
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
                           },
                           child: Container(
                             width: 80,
@@ -246,13 +294,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                             ),
                           ),
                         ),
-                        loading
-                            ? SpinKitChasingDots(
-                                color: Colors.blue,
-                              )
-                            : SizedBox(
-                                width: 0,
-                              ),
                         ElevatedButton(
                           onPressed: () => Navigator.pushNamed(context, '/'),
                           child: Container(

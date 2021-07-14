@@ -19,39 +19,16 @@ class SideDrawer extends StatelessWidget {
             elevation: 0,
             borderOnForeground: false,
             child: ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Liar'),
-              onTap: () => {
-
-              },
-            ),
-          ),
-          Card(
-            semanticContainer: true,
-            color: Colors.blue,
-            elevation: 0,
-            borderOnForeground: false,
-            child: ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Cart'),
-              onTap: () => {},
-            ),
-          ),
-          Card(
-            semanticContainer: true,
-            color: Colors.blue,
-            elevation: 0,
-            borderOnForeground: false,
-            child: ListTile(
               leading: Icon(Icons.border_color),
               title: Text('Custom Request'),
               subtitle: Text('coming soon'),
               onTap: () => {
-                showDialog(context: context, builder: (BuildContext context){
-                  return Dialog(
-                    child: ComingSoonDialog
-                  );
-                },)
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(child: ComingSoonDialog);
+                  },
+                )
               },
             ),
           ),

@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:intl/intl.dart';
 import 'package:lagbaja_cleaning/models/pricing.dart';
 import 'package:lagbaja_cleaning/models/sessions.dart';
 import 'package:lagbaja_cleaning/models/user.dart';
 import 'package:lagbaja_cleaning/services/database.dart';
 import 'package:lagbaja_cleaning/shared.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
 // import 'package:paystack_manager/paystack_pay_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -67,8 +71,8 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                   minValue: 2,
                   maxValue: 20,
                   onChanged: (value) {
-                    routineLength = value.toDouble();
                     setState(() {
+                      routineLength = value.toDouble();
                       overallTotalCost = discountedCost * routineLength;
                     });
                   },
@@ -193,35 +197,41 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
     }).toList();
   }
 
+  final plugin = PaystackPlugin();
+
+  @override
+  void initState() {
+    plugin.initialize(
+        publicKey: 'pk_test_efadf868c8117e9fdf07eaf28111bb8ec018c9ef');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser>(context);
     final secretKey = Provider.of<SecretKey>(context);
-    // void _onPaymentSuccessful(Transaction transaction) {
-    //   print("Transaction was successful");
-    //   print("Transaction Message ===> ${transaction.message}");
-    //   print("Transaction Refrence ===> ${transaction.refrenceNumber}");
-
-    //   CleaningSession initial = CleaningSession.initialData();
-    //   dynamic result = DatabaseService(uid: user.uid).updateCleaningSession(
-    //       location: selectedLocation,
-    //       apartmentType: selectedApartmentValue,
-    //       subscription: radioValue,
-    //       userUid: user.uid,
-    //       totalCost: overallTotalCost,
-    //       isRated: initial.isRated,
-    //       isPaid: true,
-    //       routineLength: routineLength.toInt(),
-    //       isCompleted: initial.isCompleted,
-    //       cleaningDay: preferredCleaningDay,
-    //       dateOrdered: initial.orderDate,
-    //       cleaningDate: selectedDate);
-    //   print("RESULT ----> ${result.toString()}");
-    //   setState(() {
-    //     successful = true;
-    //     failed = false;
-    //   });
-    // }
+    void _onPaymentSuccessful() {
+      CleaningSession initial = CleaningSession.initialData();
+      dynamic result = DatabaseService(uid: user.uid).updateCleaningSession(
+          location: selectedLocation,
+          apartmentType: selectedApartmentValue,
+          subscription: radioValue,
+          userUid: user.uid,
+          totalCost: overallTotalCost,
+          isRated: initial.isRated,
+          isPaid: true,
+          routineLength: routineLength.toInt(),
+          isCompleted: initial.isCompleted,
+          cleaningDay: preferredCleaningDay,
+          dateOrdered: initial.orderDate,
+          cleaningDate: selectedDate);
+      print("RESULT ----> ${result.toString()}");
+      setState(() {
+        successful = true;
+        failed = false;
+        loading = false;
+      });
+    }
 
     // void _onPaymentPending(Transaction transaction) {
     //   print("Transaction is pending");
@@ -248,52 +258,52 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
         String lastName,
         String subscriptionType,
         String secretKey,
-        String userUid}) {
+        String userUid}) async {
       try {
-        // PaystackPayManager(context: context)
-        //   // Don't store your secret key on users device.
-        //   // Make sure this is retrive from your server at run time
-        //   ..setSecretKey(secretKey)
-        //   //accepts widget
-        //   ..setCompanyAssetImage(Image(
-        //     height: 50,
-        //     image: AssetImage("assets/images/lagbaja.png"),
-        //   ))
-        //   ..setAmount(amountPayable.toInt() * 100)
-        //   // ..setReference("your-unique-transaction-reference")
-        //   ..setReference(
-        //       "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}")
-        //   ..setCurrency("NGN")
-        //   ..setEmail(userEmail)
-        //   ..setFirstName(firstName)
-        //   ..setLastName(lastName)
-        //   ..setMetadata(
-        //     {
-        //       "custom_fields": [
-        //         {
-        //           "value": "snapTask",
-        //           "display_name": "Payment to",
-        //           "variable_name": "payment_to"
-        //         }
-        //       ]
-        //     },
-        //   )
-        //   ..onSuccesful(_onPaymentSuccessful)
-        //   ..onPending(_onPaymentPending)
-        //   ..onFailed(_onPaymentFailed)
-        //   ..onCancel(_onPaymentCancelled)
-        //   ..initialize();
+        Charge charge = Charge()
+          ..amount = amountPayable.toInt() * 100
+          ..reference =
+              "$userUid-$subscriptionType-${DateTime.now().microsecondsSinceEpoch.toString()}"
+          // or ..accessCode = _getAccessCodeFrmInitialization()
+          ..email = userEmail;
+        CheckoutResponse response = await plugin.checkout(
+          context,
+          method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+          charge: charge,
+        );
+        dynamic transactionRef = response.reference;
+        var client = http.Client();
+        var url = Uri.parse(
+            'https://api.paystack.co/transaction/verify/$transactionRef');
+
+        var verifyResponse = await client
+            .get(url, headers: {"Authorization": "Bearer $secretKey"});
+        var jsonResponse =
+            convert.jsonDecode(verifyResponse.body) as Map<String, dynamic>;
+        print(jsonResponse);
+        if (jsonResponse["status"]) {
+          _onPaymentSuccessful();
+        } else {
+          setState(() {
+            failed = true;
+          });
+        }
+
         print('object');
       } catch (error) {
+        setState(() {
+          failed = true;
+          loading = false;
+        });
         print("Payment Error ==> $error");
       }
     }
 
     print(user.uid);
     return successful
-        ? Text('successful!!')
+        ? successImage()
         : failed
-            ? Text('failed!!')
+            ? failedImage()
             : loading
                 ? Loading()
                 : Form(
@@ -331,29 +341,24 @@ class _RoutineBookCleaningFormState extends State<RoutineBookCleaningForm> {
                                   print(selectedLocation);
                                 },
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Switch.adaptive(
-                                    value: _switchValue,
-                                    onChanged: (T) {
-                                      setState(() {
-                                        _switchValue = !_switchValue;
-                                      });
-                                      if (_switchValue) {
-                                        myController.text =
-                                            widget.userInfo.address;
-                                        selectedLocation = myController.text;
-                                      }
-                                    },
-                                    activeColor: Colors.blue[900],
-                                  ),
-                                  Text(
-                                    'Use Home Address',
-                                    style: SmallTextStyle.copyWith(
-                                        color: Colors.blue),
-                                  )
-                                ],
+                              SwitchListTile.adaptive(
+                                dense: true,
+                                title: Text(
+                                  'Use Home Address',
+                                  style: SmallTextStyle.copyWith(
+                                      color: Colors.blue),
+                                ),
+                                value: _switchValue,
+                                onChanged: (T) {
+                                  setState(() {
+                                    _switchValue = !_switchValue;
+                                  });
+                                  if (_switchValue) {
+                                    myController.text = widget.userInfo.address;
+                                    selectedLocation = myController.text;
+                                  }
+                                },
+                                activeColor: Colors.blue[900],
                               ),
                               DropdownButtonFormField(
                                 items: buildApartmentDropdown(),

@@ -122,8 +122,8 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
                   SizedBox(height: 20.0),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
+                      TextButton(
+                        onPressed: () {
                           widget.toggleView('/sign-in');
                         },
                         child: Text(

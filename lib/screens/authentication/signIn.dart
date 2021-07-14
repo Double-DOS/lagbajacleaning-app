@@ -86,8 +86,8 @@ class _SignInPageState extends State<SignInPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              GestureDetector(
-                                onTap: () {
+                              TextButton(
+                                onPressed: () {
                                   widget.toggleView('/sign-up');
                                 },
                                 child: Text(
@@ -96,11 +96,17 @@ class _SignInPageState extends State<SignInPage> {
                                       color: Colors.black54, fontSize: 14.0),
                                 ),
                               ),
-                              Text(
-                                "Forgot Password",
+                              TextButton(onPressed: ()async{
+                                await _auth.resetPassword(email);
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(content: Text('Password Reset Steps has been sent to your email!'), backgroundColor: Colors.blue)
+                               );
+                              }, child: Text(
+                                "Forgot Password?",
                                 style: SmallTextStyle.copyWith(
                                     color: Colors.black54, fontSize: 14.0),
-                              ),
+                              ),)
+
                             ],
                           ),
                           SizedBox(

@@ -55,8 +55,7 @@ class DatabaseService {
   final CollectionReference secretKeyCollection =
       FirebaseFirestore.instance.collection('secretKeys');
 
-  SecretKey _getSecretKeyFromDb(
-      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  SecretKey _getSecretKeyFromDb(snapshot) {
     return SecretKey(snapshot.data()["key"]);
   }
 
@@ -111,8 +110,7 @@ class DatabaseService {
     }
   }
 
-  CleaningSession _cleaningSessionFromDocumentSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  CleaningSession _cleaningSessionFromDocumentSnapshot(snapshot) {
     return snapshot.data == null
         ? null
         : CleaningSession(
@@ -134,27 +132,8 @@ class DatabaseService {
   }
 
   List<CleaningSession> _cleaningSessionListFromQuerySnapshot(
-      QuerySnapshot<Map<String, dynamic>> query) {
-    List<CleaningSession> cleaningList = [];
-    query.docs.forEach((snapshot) {
-      cleaningList.add(CleaningSession(
-          uid: snapshot.data()["uid"],
-          userUid: snapshot.data()["userUid"],
-          orderDate: snapshot.data()["dateOrdered"].toDate(),
-          cleaningDate: snapshot.data()["cleaningDate"].toDate(),
-          location: snapshot.data()["location"],
-          apartmentType: snapshot.data()["apartmentType"],
-          subscription: snapshot.data()["subscription"],
-          routineLength: snapshot.data()["routineLength"],
-          routineProgress: snapshot.data()["routineProgress"],
-          cleaningDay: snapshot.data()["cleaningDay"],
-          totalCost: snapshot.data()["totalCost"],
-          rating: snapshot.data()["rating"],
-          isRated: snapshot.data()["isRated"],
-          isPaid: snapshot.data()["isPaid"],
-          isCompleted: snapshot.data()["isCompleted"]));
-    });
-    return cleaningList;
+      QuerySnapshot query) {
+    return query.docs.map(_cleaningSessionFromDocumentSnapshot).toList();
   }
 
   Stream<List<CleaningSession>> get allUserCleaningSession {
@@ -163,6 +142,13 @@ class DatabaseService {
         .orderBy("dateOrdered", descending: true)
         .snapshots()
         .map(_cleaningSessionListFromQuerySnapshot);
+  }
+
+  Stream<QuerySnapshot> get allStreamUserCleaningSession {
+    return cleaningSessionCollection
+        .where("userUid", isEqualTo: uid)
+        .orderBy("dateOrdered", descending: true)
+        .snapshots();
   }
 
   CompletedSessionOverview _completedStringFromStreamInt(int streamInteger) {

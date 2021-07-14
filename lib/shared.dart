@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lagbaja_cleaning/screens/home/dashboard.dart';
 
@@ -60,14 +61,16 @@ Widget ComingSoonDialog = Container(
     child: Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
-      children: [
-        Image(
-          height: 200,
-          image: AssetImage("assets/images/coming_soon.png")
-        ),
-        Center(child: Text('Coming Soon!', style: BoldTitleTextStyle.copyWith(color: Colors.blue),))
-      ],
-    ),
+        children: [
+          Image(
+              height: 200, image: AssetImage("assets/images/coming_soon.png")),
+          Center(
+              child: Text(
+            'Coming Soon!',
+            style: BoldTitleTextStyle.copyWith(color: Colors.blue),
+          ))
+        ],
+      ),
     ),
   ),
 );
@@ -218,6 +221,24 @@ Widget successImage() {
         ),
         Text(
           'We are on our way!',
+          style: BoldTitleTextStyle.copyWith(color: Colors.blue),
+        )
+      ],
+    ),
+  );
+}
+
+Widget failedImage() {
+  return Container(
+    child: Column(
+      children: [
+        Image(
+          height: 250,
+          image: AssetImage('assets/images/payment_failed.png'),
+        ),
+        Text(
+          'Something went wrong. Please try again!',
+          textAlign: TextAlign.center,
           style: BoldTitleTextStyle.copyWith(color: Colors.blue),
         )
       ],
