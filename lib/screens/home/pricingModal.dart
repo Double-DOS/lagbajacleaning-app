@@ -12,118 +12,750 @@ class PricingModal extends StatefulWidget {
 }
 
 class _PricingModalState extends State<PricingModal> {
+  final isExpanded = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: DefaultTabController(
-          length: 4,
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  child: TabBar(
-                    tabs: [
-                      Tab(
-                        text: 'Mild',
-                        icon: Icon(CupertinoIcons.smoke_fill),
-                      ),
-                      Tab(
-                        text: 'Standard',
-                        icon: Icon(CupertinoIcons.smoke_fill),
-                      ),
-                      Tab(
-                        text: 'Deep',
-                        icon: Icon(CupertinoIcons.smoke_fill),
-                      ),
-                      Tab(
-                        text: 'Routine',
-                        icon: Icon(CupertinoIcons.smoke_fill),
-                      ),
-                    ],
-                    labelColor: Colors.blue,
+      appBar: AppBar(
+        title: Text('Affordable Prices, Just For You!'),
+      ),
+      body: SingleChildScrollView(
+        child: ExpansionPanelList.radio(
+          children: [
+            ExpansionPanelRadio(
+              value: 'single_room',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    'Single Room',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
                   ),
-                ),
-                Expanded(
-                  child: TabBarView(children: [
-                    MildPlan(),
-                    StandardPlan(),
-                    DeepPlan(),
-                    DeepPlan(),
-                  ]),
-                )
-              ],
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '4000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '6000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '8500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '4550',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '5200',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '5850',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            ExpansionPanelRadio(
+              value: 'single_room_self_con',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    'Self-Contain Room',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '5500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '7500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '10000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '5800',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '6400',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '7200',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ExpansionPanelRadio(
+              value: 'self_con_room_parlour',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    'Self-Contain Room And Parlour',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '7000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '9000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '11500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '6650',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '7600',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '8500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ExpansionPanelRadio(
+              value: '2_bedroom',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    '2-Bedroom Apartment',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '11500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '13500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '16000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '9800',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '11200',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '12600',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ExpansionPanelRadio(
+              value: '3_bedroom',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    '3-Bedroom Apartment',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '17500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '19500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '22000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '14000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '16000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '18000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ExpansionPanelRadio(
+              value: '4_bedroom',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    '4-Bedroom Apartment',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '21500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '23500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '26000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '16800',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '16200',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '21600',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ExpansionPanelRadio(
+              value: 'duplex',
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return ListTile(
+                  title: Text(
+                    'Duplex',
+                    style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue, fontSize: MediumTextSize),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Mild Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '33500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Standard Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '35500',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airplane_ticket_outlined),
+                    dense: true,
+                    title: Text(
+                      'Deep Cleaning',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '38000',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.blue[900],
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '25200',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Bi-Weekly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '28800',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.replay_outlined),
+                    dense: true,
+                    title: Text(
+                      'Monthly Routine',
+                      style: BodyTextStyle,
+                    ),
+                    trailing: Text(
+                      '32400',
+                      style: BoldTitleTextStyle.copyWith(
+                        color: Colors.blue[700],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class MildPlan extends StatefulWidget {
-  const MildPlan({Key key}) : super(key: key);
-
-  @override
-  _MildPlanState createState() => _MildPlanState();
-}
-
-class _MildPlanState extends State<MildPlan> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Column(children: [
-      Text('Mild Cleaning',
-          style: BoldTitleTextStyle.copyWith(
-            color: Colors.blue,
-          )),
-    ]));
-  }
-}
-
-class StandardPlan extends StatefulWidget {
-  const StandardPlan({Key key}) : super(key: key);
-
-  @override
-  _StandardPlanState createState() => _StandardPlanState();
-}
-
-class _StandardPlanState extends State<StandardPlan> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'Standard Cleaning',
-            style: BoldTitleTextStyle.copyWith(color: Colors.blue),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class DeepPlan extends StatefulWidget {
-  const DeepPlan({Key key}) : super(key: key);
-
-  @override
-  _DeepPlanState createState() => _DeepPlanState();
-}
-
-class _DeepPlanState extends State<DeepPlan> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'Deep Cleaning',
-            style: BoldTitleTextStyle.copyWith(color: Colors.blue),
-          )
-        ],
       ),
     );
   }

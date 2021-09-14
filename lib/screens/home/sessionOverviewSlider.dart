@@ -65,7 +65,7 @@ class SessionOverviewCarousel extends StatelessWidget {
                   )
                 : CarouselSlider(
                     options: CarouselOptions(
-                        enableInfiniteScroll: false,
+                        enableInfiniteScroll: true,
                         scrollPhysics: BouncingScrollPhysics(),
                         height: 70,
                         autoPlay: true,

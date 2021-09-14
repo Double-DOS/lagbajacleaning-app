@@ -31,10 +31,10 @@ class MyApp extends StatelessWidget {
                 bodyText1: BodyTextStyle,
                 bodyText2: BodyTextStyle),
             appBarTheme: AppBarTheme(
-                textTheme: TextTheme(headline1: AppBarTextStyle),
-                backgroundColor: Colors.blue,
-                elevation: 10.00,
-                shadowColor: Colors.purple)),
+              textTheme: TextTheme(headline1: AppBarTextStyle),
+              backgroundColor: Colors.blue,
+              elevation: 10.00,
+            )),
       ),
     );
   }

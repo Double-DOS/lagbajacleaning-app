@@ -15,12 +15,12 @@ class SecretKey {
 
 class PricingList {
   double singleRoom = 4000.0;
-  double singleSelfContainRoom = 6000.0;
-  double roomAndParlourSelfContain = 8000.0;
-  double twoBedroom = 13500.0;
-  double threeBedroom = 20500.0;
-  double fourBedroom = 23500.0;
-  double duplex = 35000.0;
+  double singleSelfContainRoom = 5500.0;
+  double roomAndParlourSelfContain = 7000.0;
+  double twoBedroom = 11500.0;
+  double threeBedroom = 17500.0;
+  double fourBedroom = 21500.0;
+  double duplex = 33500.0;
 }
 
 class CleaningLevels {
@@ -30,9 +30,9 @@ class CleaningLevels {
 }
 
 class SubscriptionPlans {
-  double weeklyPlan = 0.20;
-  double biWeeklyPlan = 0.10;
-  double monthlylyPlan = 0.05;
+  double weeklyPlan = 0.30;
+  double biWeeklyPlan = 0.20;
+  double monthlylyPlan = 0.10;
 }
 
 List<String> apartmentTypes = [
